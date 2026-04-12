@@ -1,1 +1,11 @@
-{}
+{
+  "card1-img": {
+    "src": "https://i0.wp.com/bonitour.com.br/wp-content/uploads/2024/02/Jericoacoara-Pedra-Furada-creditos_-Rudimencial-Getty-Images.webp?fit=960%2C600&ssl=1"
+  },
+  "card2-img": {
+    "src": "https://admin.cnnbrasil.com.br/wp-content/uploads/sites/12/2022/09/disney-novidades-2023.webp?w=1200&h=1200&crop=1"
+  },
+  "card5-img": {
+    "src": "https://www.viajenaviagem.com/wp-content/uploads/2024/02/letreiro-porto-de-galinhas-16x9-1.jpg.webp"
+  }
+}
