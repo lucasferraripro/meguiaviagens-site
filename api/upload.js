@@ -9,7 +9,7 @@ export default async function handler(req, res) {
 
     const token  = process.env.GITHUB_TOKEN;
     const owner  = 'lucasferraripro';
-    const repo   = 'lovisa-destinos-site';
+    const repo   = 'meguiaviagens-site';
     const adminSecret = process.env.ADMIN_SECRET || 'Lovisa@2025';
 
     let body = '';
