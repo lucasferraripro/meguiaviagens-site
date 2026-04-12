@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Me Guia Viagens — Hotéis, Milhas & Visto Americano</title>
+    <meta name="description" content="Promoções em hotéis e resorts, estratégias com milhas aéreas, auxílio no visto americano e bloqueios de voos. Viaje mais pagando menos com a Me Guia Viagens.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap"></noscript>
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+    <link rel="icon" href="logo.png" type="image/png">
+    <style>
+        /* ── RESET ── */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        /* ── TOKENS ── */
+        :root {
+            --navy:       #1B3A8C;
+            --navy-dark:  #0F2460;
+            --accent:     #E8B84B;
+            --accent-d:   #D4A030;
+            --gold:       #E8B84B;
+            --text:       #1A1F2E;
+            --muted:      #6B7280;
+            --bg:         #F8F9FC;
+            --white:      #FFFFFF;
+            --border:     #E5E9F2;
+            --wa:         #25D366;
+            --hh:         68px;
+            --r:          18px;
+            --rl:         28px;
+        }
+
+        /* ── BASE ── */
+        html { scroll-behavior: smooth; scroll-padding-top: var(--hh); overflow-x: hidden; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text',
+                         'Helvetica Neue', 'Segoe UI', Arial, sans-serif;
+            font-size: 16px;
+            line-height: 1.5;
+            color: var(--text);
+            background: var(--white);
+            overflow-x: hidden;
+            max-width: 100vw;
+            -webkit-font-smoothing: antialiased;
+        }
+        img { display: block; max-width: 100%; }
+        a { text-decoration: none; color: inherit; }
+
+        /* ── LAYOUT ── */
+        .container { width: 100%; max-width: 1180px; margin: 0 auto; padding: 0 20px; }
+        .section    { padding: 80px 0; }
+
+        /* ── TYPE ── */
+        .serif { font-family: 'Playfair Display', Georgia, serif; }
+        .label {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 12px;
+        }
+        .h2 {
+            font-family: 'Playfair Display', Georgia, serif;
+            font-size: clamp(1.7rem, 3.5vw, 2.4rem);
+            font-weight: 700;
+            color: var(--navy);
+            line-height: 1.2;
+            margin-bottom: 16px;
+        }
+        .lead { font-size: 1.05rem; color: var(--muted); line-height: 1.7; }
+
+        /* ── BUTTONS ── */
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 14px 28px; border-radius: 50px;
+            font-size: 15px; font-weight: 600; border: none;
+            cursor: pointer; transition: all .22s ease;
+            font-family: inherit;
+        }
+        .btn-accent  { background: var(--accent); color: #fff; }
+        .btn-accent:hover  { background: var(--accent-d); transform: translateY(-2px); box-shadow: 0 8px 22px rgba(232,184,75,.38); }
+        .btn-ghost   { background: rgba(255,255,255,.14); color: #fff; border: 1.5px solid rgba(255,255,255,.5); backdrop-filter: blur(6px); }
+        .btn-ghost:hover   { background: rgba(255,255,255,.22); }
+        .btn-navy    { background: var(--navy); color: #fff; }
+        .btn-navy:hover    { background: var(--navy-dark); transform: translateY(-2px); box-shadow: 0 8px 22px rgba(27,58,140,.3); }
+        .btn-sm { padding: 10px 20px; font-size: 14px; }
+        .btn-block { width: 100%; justify-content: center; }
+
+        /* ══════════════════════════════════════
+           HEADER
+        ══════════════════════════════════════ */
+        #header {
+            position: fixed; top: 0; left: 0; right: 0;
+            height: var(--hh); z-index: 900;
+            transition: background .3s, box-shadow .3s;
+        }
+        #header.solid { background: var(--white); box-shadow: 0 1px 16px rgba(0,0,0,.09); }
+
+        .hdr-inner {
+            height: var(--hh);
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 24px;
+        }
+        .logo {
+            display: flex; align-items: center; gap: 9px;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem; font-weight: 700;
+            color: #fff;
+            transition: color .3s;
+        }
+        #header.solid .logo { color: var(--navy); }
+
+        .hdr-nav { display: flex; align-items: center; gap: 28px; }
+        .hdr-nav a { font-size: 14px; font-weight: 500; color: rgba(255,255,255,.88); transition: color .2s; }
+        .hdr-nav a:hover { color: var(--accent); }
+        #header.solid .hdr-nav a { color: var(--text); }
+        #header.solid .hdr-nav a:hover { color: var(--accent); }
+
+        .hdr-cta { flex-shrink: 0; }
+
+        /* burger */
+        .burger { display: none; flex-direction: column; gap: 5px; padding: 6px; background: none; border: none; cursor: pointer; }
+        .burger span { display: block; width: 22px; height: 2px; background: #fff; border-radius: 2px; transition: all .3s; }
+        #header.solid .burger span { background: var(--navy); }
+        .burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .burger.open span:nth-child(2) { opacity: 0; }
+        .burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+        /* mobile nav panel */
+        #mobile-panel {
+            display: none; position: fixed;
+            top: var(--hh); left: 0; right: 0;
+            background: var(--white);
+            padding: 16px 20px 28px;
+            box-shadow: 0 8px 32px rgba(0,0,0,.12);
+            z-index: 899; flex-direction: column; gap: 2px;
+        }
+        #mobile-panel.open { display: flex; }
+        #mobile-panel a {
+            padding: 13px 14px; font-size: 15px; font-weight: 600;
+            color: var(--text); border-radius: 12px; transition: background .2s;
+        }
+        #mobile-panel a:hover { background: var(--bg); color: var(--accent); }
+        #mobile-panel .mpanel-cta {
+            margin-top: 12px; background: var(--wa); color: #fff;
+            border-radius: 50px; text-align: center; padding: 14px;
+        }
+
+        /* ══════════════════════════════════════
+           HERO
+        ══════════════════════════════════════ */
+        #home {
+            position: relative; height: 100svh; min-height: 600px;
+            display: flex; align-items: center; overflow: hidden;
+        }
+        .hero-bg {
+            position: absolute; inset: 0;
+            background: url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+        }
+        .hero-bg::after {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(11,28,74,.92) 0%, rgba(11,28,74,.50) 70%);
+        }
+        .hero-body { position: relative; z-index: 1; color: #fff; max-width: 680px; }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 7px;
+            background: rgba(255,255,255,.12); backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,.22); border-radius: 50px;
+            padding: 7px 18px; font-size: 12px; font-weight: 600;
+            letter-spacing: .1em; text-transform: uppercase;
+            color: rgba(255,255,255,.9); margin-bottom: 24px;
+        }
+        .hero-badge i { color: var(--accent); }
+        .hero-h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.6rem, 7vw, 4.8rem);
+            font-weight: 700; line-height: 1.08; margin-bottom: 20px;
+        }
+        .hero-h1 em { font-style: normal; color: var(--accent); }
+        .hero-p { font-size: 1.1rem; color: rgba(255,255,255,.8); line-height: 1.7; margin-bottom: 36px; max-width: 500px; }
+        .hero-btns { display: flex; flex-wrap: wrap; gap: 12px; }
+
+        .hero-scroll {
+            position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%);
+            display: flex; flex-direction: column; align-items: center; gap: 6px;
+            color: rgba(255,255,255,.45); font-size: 11px; letter-spacing: .1em;
+            text-transform: uppercase; z-index: 1;
+            animation: hbounce 2s infinite;
+        }
+        @keyframes hbounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(8px)} }
+
+        /* ══════════════════════════════════════
+           STATS
+        ══════════════════════════════════════ */
+        .stats-bar { background: var(--navy-dark); border-bottom: 3px solid var(--accent); }
+        .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); }
+        .stat {
+            display: flex; flex-direction: column; align-items: center;
+            padding: 36px 16px; border-right: 1px solid rgba(255,255,255,.07);
+            text-align: center;
+        }
+        .stat:last-child { border-right: none; }
+        .stat-n {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.4rem; font-weight: 700; color: var(--accent); line-height: 1;
+            margin-bottom: 6px;
+        }
+        .stat-l { font-size: 11px; color: rgba(255,255,255,.55); font-weight: 600; letter-spacing: .07em; text-transform: uppercase; }
+
+        /* ══════════════════════════════════════
+           COMO FUNCIONA
+        ══════════════════════════════════════ */
+        .steps-hdr { text-align: center; margin-bottom: 56px; }
+        .steps-hdr .lead { max-width: 520px; margin: 0 auto; }
+        .steps-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 28px; position: relative; }
+        .steps-row::before {
+            content: ''; position: absolute;
+            top: 44px; left: 16%; right: 16%; height: 2px;
+            background: linear-gradient(90deg, var(--accent), var(--gold));
+        }
+        .step {
+            position: relative; z-index: 1; background: var(--white);
+            border: 1px solid var(--border); border-radius: var(--r);
+            padding: 40px 28px; text-align: center; transition: all .3s;
+        }
+        .step:hover { border-color: var(--accent); box-shadow: 0 14px 40px rgba(232,184,75,.11); transform: translateY(-5px); }
+        .step-num {
+            width: 52px; height: 52px; background: var(--accent); color: #fff;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            font-family: 'Playfair Display', serif; font-size: 1.35rem; font-weight: 700;
+            margin: 0 auto 20px; box-shadow: 0 6px 18px rgba(232,184,75,.3);
+        }
+        .step h3 { font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 10px; }
+        .step p  { font-size: 14px; color: var(--muted); line-height: 1.65; }
+
+        /* ══════════════════════════════════════
+           SERVIÇOS (DESTAQUE)
+        ══════════════════════════════════════ */
+        .servicos-bg { background: linear-gradient(135deg, var(--navy-dark), var(--navy)); }
+        .servicos-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; }
+        .servico-card {
+            background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.13);
+            border-radius: var(--r); padding: 32px 22px; text-align: center;
+            transition: all .3s;
+        }
+        .servico-card:hover { background: rgba(255,255,255,.14); border-color: var(--accent); transform: translateY(-4px); }
+        .servico-icon {
+            width: 60px; height: 60px; background: var(--accent);
+            border-radius: 16px; margin: 0 auto 18px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px; color: #fff;
+        }
+        .servico-card h3 { font-size: .95rem; font-weight: 700; color: #fff; margin-bottom: 10px; }
+        .servico-card p  { font-size: 13px; color: rgba(255,255,255,.62); line-height: 1.6; }
+
+        /* ══════════════════════════════════════
+           DESTINOS
+        ══════════════════════════════════════ */
+        .dest-bg { background: var(--bg); }
+        .dest-hdr { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin-bottom: 40px; }
+
+        .cards-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+
+        .card-link {
+            display: block;
+            border-radius: var(--r); overflow: hidden;
+            background: var(--white);
+            box-shadow: 0 3px 14px rgba(0,0,0,.06);
+            transition: all .35s ease;
+            color: inherit;
+        }
+        .card-link:hover { transform: translateY(-9px); box-shadow: 0 18px 44px rgba(0,0,0,.13); }
+
+        .card-img { position: relative; height: 236px; overflow: hidden; }
+        .card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; aspect-ratio: 4/3; }
+        .card-link:hover .card-img img { transform: scale(1.07); }
+
+        .card-flag {
+            position: absolute; top: 14px; left: 14px;
+            background: rgba(255,255,255,.93); backdrop-filter: blur(6px);
+            padding: 4px 13px; border-radius: 50px;
+            font-size: 11px; font-weight: 700; color: var(--navy);
+            text-transform: uppercase; letter-spacing: .05em;
+        }
+        .card-overlay {
+            position: absolute; inset: 0;
+            background: linear-gradient(to top, rgba(11,28,74,.72) 0%, transparent 55%);
+            opacity: 0; transition: opacity .33s;
+            display: flex; align-items: flex-end; padding: 20px;
+        }
+        .card-link:hover .card-overlay { opacity: 1; }
+        .card-overlay span { color: #fff; font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 7px; }
+
+        .card-body { padding: 20px; }
+        .card-loc { display: flex; align-items: center; gap: 5px; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
+        .card-loc i { color: var(--accent); font-size: 11px; }
+        .card-body h3 { font-size: 1rem; font-weight: 700; color: var(--navy); margin-bottom: 12px; }
+        .card-foot {
+            display: flex; align-items: center; justify-content: space-between;
+            padding-top: 14px; border-top: 1px solid var(--border);
+        }
+        .card-price { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 700; color: var(--accent); }
+        .card-price small { font-family: -apple-system, sans-serif; font-size: 11px; color: var(--muted); font-weight: 400; }
+        .card-arrow { font-size: 13px; color: var(--navy); font-weight: 600; display: flex; align-items: center; gap: 5px; transition: gap .2s, color .2s; }
+        .card-link:hover .card-arrow { gap: 10px; color: var(--accent); }
+
+        /* ══════════════════════════════════════
+           DIFERENCIAIS
+        ══════════════════════════════════════ */
+        .dif-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; align-items: center; }
+        .dif-img-wrap { position: relative; }
+        .dif-img { width: 100%; aspect-ratio: 4/5; object-fit: cover; border-radius: var(--rl); box-shadow: 0 20px 56px rgba(27,58,140,.18); }
+        .dif-badge {
+            position: absolute; bottom: -18px; right: -18px;
+            background: var(--navy-dark); color: #fff;
+            border-radius: var(--r); padding: 20px 24px; text-align: center;
+            box-shadow: 0 8px 28px rgba(0,0,0,.2);
+        }
+        .dif-badge strong { font-family: 'Playfair Display', serif; font-size: 1.8rem; display: block; color: var(--accent); }
+        .dif-badge small  { font-size: 11px; color: rgba(255,255,255,.6); }
+        .dif-list { margin-top: 32px; display: flex; flex-direction: column; gap: 18px; }
+        .dif-item { display: flex; gap: 14px; align-items: flex-start; }
+        .dif-icon {
+            width: 44px; height: 44px; flex-shrink: 0;
+            background: rgba(232,184,75,.12); border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 16px; color: var(--accent);
+        }
+        .dif-item h4 { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 3px; }
+        .dif-item p  { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+        /* ══════════════════════════════════════
+           DEPOIMENTOS
+        ══════════════════════════════════════ */
+        .dep-bg { background: var(--navy-dark); }
+        .dep-hdr { text-align: center; margin-bottom: 48px; }
+        .dep-hdr .h2 { color: #fff; }
+        .dep-hdr .lead { color: rgba(255,255,255,.56); max-width: 480px; margin: 0 auto; }
+        .dep-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 24px; max-width: 860px; margin: 0 auto; }
+        .dep-card-full { grid-column: 1 / -1; }
+        .dep-card {
+            background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+            border-radius: var(--r); padding: 32px; transition: all .3s;
+        }
+        .dep-card:hover { background: rgba(255,255,255,.1); border-color: var(--accent); }
+        .dep-stars { color: var(--gold); font-size: 13px; margin-bottom: 16px; }
+        .dep-text  { font-size: 14px; color: rgba(255,255,255,.78); line-height: 1.75; margin-bottom: 24px; font-style: italic; }
+        .dep-author { display: flex; align-items: center; gap: 12px; }
+        .dep-av { width: 40px; height: 40px; border-radius: 50%; overflow: hidden; border: 2px solid var(--accent); flex-shrink: 0; }
+        .dep-av img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 1; }
+        .dep-name { font-size: 13px; font-weight: 700; color: #fff; }
+        .dep-dest { font-size: 12px; color: rgba(255,255,255,.45); margin-top: 2px; }
+
+        /* ══════════════════════════════════════
+           CONTATO
+        ══════════════════════════════════════ */
+        .contact-bg { background: var(--bg); }
+        .form-wrap  { display: grid; grid-template-columns: 1fr 1.1fr; gap: 72px; align-items: start; }
+        .form-left p { font-size: 15px; color: var(--muted); line-height: 1.7; margin-bottom: 32px; }
+        .finfo { display: flex; flex-direction: column; gap: 18px; }
+        .finfo-row { display: flex; gap: 14px; align-items: center; }
+        .finfo-ico { width: 40px; height: 40px; flex-shrink: 0; background: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: var(--accent); font-size: 14px; box-shadow: 0 2px 8px rgba(0,0,0,.07); }
+        .finfo-row strong { display: block; font-size: 13px; font-weight: 700; color: var(--navy); }
+        .finfo-row span   { font-size: 13px; color: var(--muted); }
+
+        .form-card {
+            background: var(--white); border-radius: var(--rl);
+            padding: 40px 36px; box-shadow: 0 10px 44px rgba(27,58,140,.1);
+        }
+        .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+        .ig { margin-bottom: 16px; }
+        .ig label {
+            display: block; font-size: 11px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: .05em;
+            color: var(--navy); margin-bottom: 7px;
+        }
+        .ig input, .ig select, .ig textarea {
+            width: 100%; padding: 12px 14px;
+            border: 1.5px solid var(--border); border-radius: 12px;
+            font-family: inherit; font-size: 15px; color: var(--text);
+            background: var(--bg); outline: none;
+            transition: border .2s, box-shadow .2s;
+            -webkit-appearance: none;
+        }
+        .ig input:focus, .ig select:focus, .ig textarea:focus {
+            border-color: var(--accent); box-shadow: 0 0 0 3px rgba(232,184,75,.15);
+            background: #fff;
+        }
+        .ig textarea { resize: vertical; min-height: 80px; }
+
+        /* ══════════════════════════════════════
+           FOOTER
+        ══════════════════════════════════════ */
+        footer { background: var(--navy-dark); color: rgba(255,255,255,.5); padding: 72px 0 0; }
+        .ft-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 48px; padding-bottom: 56px; }
+        .ft-brand p { font-size: 13px; line-height: 1.7; margin-top: 14px; max-width: 240px; }
+        .ft-brand .logo { color: #fff; }
+        footer h5 { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.35); margin-bottom: 18px; }
+        .ft-links { display: flex; flex-direction: column; gap: 10px; }
+        .ft-links a { font-size: 13px; color: rgba(255,255,255,.58); transition: color .2s; }
+        .ft-links a:hover { color: var(--accent); }
+        .ft-social { display: flex; gap: 10px; margin-top: 6px; }
+        .ft-social a {
+            width: 36px; height: 36px; border-radius: 50%;
+            border: 1px solid rgba(255,255,255,.14);
+            display: flex; align-items: center; justify-content: center;
+            color: rgba(255,255,255,.55); font-size: 13px; transition: all .2s;
+        }
+        .ft-social a:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+        .ft-bottom {
+            border-top: 1px solid rgba(255,255,255,.07); padding: 22px 0;
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 12px; gap: 12px;
+        }
+
+        /* ── WA FLOAT ── */
+        .wa {
+            position: fixed; bottom: 24px; right: 24px;
+            width: 56px; height: 56px; background: var(--wa); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: #fff; font-size: 1.5rem; z-index: 888;
+            box-shadow: 0 6px 18px rgba(37,211,102,.42);
+            transition: transform .25s, box-shadow .25s;
+        }
+        .wa:hover { transform: scale(1.12); box-shadow: 0 10px 26px rgba(37,211,102,.55); }
+        .wa::before {
+            content: ''; position: absolute; inset: -6px; border-radius: 50%;
+            background: rgba(37,211,102,.24); animation: wapulse 2s infinite;
+        }
+        @keyframes wapulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.35);opacity:0} }
+
+        /* ── REVEAL ── */
+        .rv { opacity: 0; transform: translateY(26px); transition: opacity .55s ease, transform .55s ease; }
+        .rv.on { opacity: 1; transform: none; }
+
+        /* ══════════════════════════════════════
+           RESPONSIVE — TABLET (≤1024px)
+        ══════════════════════════════════════ */
+        @media(max-width:1024px) {
+            .dif-grid { gap: 48px; }
+            .ft-top { grid-template-columns: 1fr 1fr; gap: 36px; }
+            .servicos-grid { grid-template-columns: repeat(2,1fr); }
+        }
+
+        /* ══════════════════════════════════════
+           RESPONSIVE — MOBILE (≤768px)
+        ══════════════════════════════════════ */
+        @media(max-width:768px) {
+            :root { --hh: 60px; }
+            .section { padding: 56px 0; }
+
+            /* header */
+            .hdr-nav  { display: none; }
+            .hdr-cta  { display: none; }
+            .burger   { display: flex; }
+
+            /* hero */
+            .hero-h1  { font-size: 2.4rem; }
+            .hero-p   { font-size: 1rem; }
+            .hero-btns .btn { width: 100%; justify-content: center; }
+
+            /* stats */
+            .stats-grid { grid-template-columns: repeat(4, 1fr); gap: 0; padding: 0 5px; }
+            .stat { padding: 24px 5px; }
+            .stat-n { font-size: 1.4rem; }
+            .stat-l { font-size: 8px; letter-spacing: 0; }
+
+            /* steps */
+            .steps-row { grid-template-columns: 1fr; }
+            .steps-row::before { display: none; }
+
+            /* servicos */
+            .servicos-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
+
+            /* cards */
+            .cards-grid { grid-template-columns: 1fr; }
+            .dest-hdr   { flex-direction: column; align-items: flex-start; }
+
+            /* dif */
+            .dif-grid { grid-template-columns: 1fr; }
+            .dif-img-wrap { display: none; }
+
+            /* dep */
+            .dep-grid { grid-template-columns: 1fr; max-width: 480px; }
+            .dep-card-full { grid-column: 1; }
+
+            /* form */
+            .form-wrap { grid-template-columns: 1fr; gap: 40px; }
+            .row2 { grid-template-columns: 1fr; }
+
+            /* footer */
+            .ft-top { grid-template-columns: 1fr; gap: 28px; }
+            .ft-bottom { flex-direction: column; text-align: center; }
+        }
+
+        /* ══════════════════════════════════════
+           RESPONSIVE — SMALL (≤480px)
+        ══════════════════════════════════════ */
+        @media(max-width:480px) {
+            .container { padding: 0 16px; }
+            .form-card { padding: 28px 20px; }
+            .card-img { height: 200px; }
+            .hero-h1 { font-size: 2.1rem; }
+            .servicos-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ════════════ HEADER ════════════ -->
+<header id="header">
+    <div class="container">
+        <div class="hdr-inner">
+            <a href="#home" class="logo">
+                <div style="height:52px;display:flex;align-items:center;">
+                    <img src="logo.png" alt="Me Guia Viagens" style="height:48px;width:auto;max-width:180px;object-fit:contain;filter:brightness(0) invert(1);" id="logo-img">
+                </div>
+            </a>
+            <nav class="hdr-nav">
+                <a href="#home">Início</a>
+                <a href="#destinos">Destinos</a>
+                <a href="#servicos">Serviços</a>
+                <a href="#diferenciais">Por Que Nós</a>
+                <a href="#depoimentos">Depoimentos</a>
+                <a href="#contato">Orçamento</a>
+            </nav>
+            <div class="hdr-cta">
+                <a href="https://wa.me/554299732517" class="btn btn-accent btn-sm" id="hdr-wa">
+                    <i class="fab fa-whatsapp"></i> WhatsApp
+                </a>
+            </div>
+            <button class="burger" id="burger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </div>
+</header>
+
+<nav id="mobile-panel">
+    <a href="#home"         onclick="closePanel()">Início</a>
+    <a href="#destinos"     onclick="closePanel()">Destinos</a>
+    <a href="#servicos"     onclick="closePanel()">Serviços</a>
+    <a href="#diferenciais" onclick="closePanel()">Por Que Nós</a>
+    <a href="#depoimentos"  onclick="closePanel()">Depoimentos</a>
+    <a href="#contato"      onclick="closePanel()">Orçamento</a>
+    <a href="https://wa.me/554299732517" class="mpanel-cta">
+        <i class="fab fa-whatsapp"></i> Falar no WhatsApp
+    </a>
+</nav>
+
+<!-- ════════════ HERO ════════════ -->
+<section id="home">
+    <div class="hero-bg"></div>
+    <div class="container">
+        <div class="hero-body">
+            <div class="hero-badge" data-eid="hero-badge" data-elabel="Badge Hero"><i class="fa-solid fa-plane"></i> Especialistas em Promoções & Milhas Aéreas</div>
+            <h1 class="hero-h1" data-eid="hero-title" data-elabel="Título Principal">Sua viagem dos sonhos começa <em>aqui</em></h1>
+            <p class="hero-p" data-eid="hero-sub" data-elabel="Subtítulo Hero">Hotéis & Resorts nacionais e internacionais, estratégias com milhas aéreas, auxílio no visto americano e os melhores bloqueios de voos. Realize seus sonhos com quem realmente entende de viagem.</p>
+            <div class="hero-btns">
+                <a href="#contato" class="btn btn-accent">Solicitar Orçamento <i class="fa-solid fa-arrow-right"></i></a>
+                <a href="#destinos" class="btn btn-ghost">Ver Destinos</a>
+            </div>
+        </div>
+    </div>
+    <div class="hero-scroll"><span>Explorar</span><i class="fa-solid fa-chevron-down"></i></div>
+</section>
+
+<!-- ════════════ STATS ════════════ -->
+<div class="stats-bar">
+    <div class="container">
+        <div class="stats-grid">
+            <div class="stat rv"><div class="stat-n" data-eid="home-stat1-n" data-elabel="Stat 1 Número">+500</div><div class="stat-l" data-eid="home-stat1-l" data-elabel="Stat 1 Texto">Viajantes Felizes</div></div>
+            <div class="stat rv"><div class="stat-n" data-eid="home-stat2-n" data-elabel="Stat 2 Número">+20</div><div class="stat-l" data-eid="home-stat2-l" data-elabel="Stat 2 Texto">Destinos Atendidos</div></div>
+            <div class="stat rv"><div class="stat-n" data-eid="home-stat3-n" data-elabel="Stat 3 Número">100%</div><div class="stat-l" data-eid="home-stat3-l" data-elabel="Stat 3 Texto">Atendimento Pessoal</div></div>
+            <div class="stat rv"><div class="stat-n" data-eid="home-stat4-n" data-elabel="Stat 4 Número">5★</div><div class="stat-l" data-eid="home-stat4-l" data-elabel="Stat 4 Texto">Avaliação dos Clientes</div></div>
+        </div>
+    </div>
+</div>
+
+<!-- ════════════ SERVIÇOS ════════════ -->
+<section class="section servicos-bg" id="servicos">
+    <div class="container">
+        <div class="steps-hdr rv" style="margin-bottom:48px;">
+            <span class="label" style="color:var(--accent)">O que fazemos</span>
+            <h2 class="h2" style="color:#fff;" data-eid="servicos-title" data-elabel="Título Serviços">Tudo o que você precisa<br>para viajar mais e melhor</h2>
+            <p class="lead" style="color:rgba(255,255,255,.6);">Soluções completas para você viajante: do planejamento ao embarque.</p>
+        </div>
+        <div class="servicos-grid rv">
+            <div class="servico-card">
+                <div class="servico-icon"><i class="fa-solid fa-hotel"></i></div>
+                <h3 data-eid="serv1-title" data-elabel="Serviço 1 Título">Hotéis & Resorts</h3>
+                <p data-eid="serv1-desc" data-elabel="Serviço 1 Texto">Promoções exclusivas em resorts e hotéis no Brasil e no mundo. As melhores opções com condições especiais para você e sua família.</p>
+            </div>
+            <div class="servico-card">
+                <div class="servico-icon"><i class="fa-solid fa-credit-card"></i></div>
+                <h3 data-eid="serv2-title" data-elabel="Serviço 2 Título">Estratégias com Milhas</h3>
+                <p data-eid="serv2-desc" data-elabel="Serviço 2 Texto">Maximize seus pontos e milhas para conseguir passagens aéreas de graça ou com desconto. Voe mais pagando menos!</p>
+            </div>
+            <div class="servico-card">
+                <div class="servico-icon"><i class="fa-solid fa-passport"></i></div>
+                <h3 data-eid="serv3-title" data-elabel="Serviço 3 Título">Auxílio no Visto Americano</h3>
+                <p data-eid="serv3-desc" data-elabel="Serviço 3 Texto">Preenchimento de formulários DS-160, agendamento de entrevistas no consulado e orientação completa para você conquistar o seu visto.</p>
+            </div>
+            <div class="servico-card">
+                <div class="servico-icon"><i class="fa-solid fa-plane-departure"></i></div>
+                <h3 data-eid="serv4-title" data-elabel="Serviço 4 Título">Bloqueios Aéreos</h3>
+                <p data-eid="serv4-desc" data-elabel="Serviço 4 Texto">Acesso a voos promocionais e bloqueios de tarifas de grupo antes que o público geral saiba. As melhores ofertas chegam primeiro para você.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ════════════ COMO FUNCIONA ════════════ -->
+<section class="section" id="como-funciona">
+    <div class="container">
+        <div class="steps-hdr rv">
+            <span class="label">Processo</span>
+            <h2 class="h2" data-eid="steps-title" data-elabel="Título Processo">Sua viagem dos sonhos em 3 passos</h2>
+            <p class="lead">Da primeira conversa até o embarque, a Me Guia cuida de cada detalhe por você.</p>
+        </div>
+        <div class="steps-row">
+            <div class="step rv">
+                <div class="step-num">1</div>
+                <h3 data-eid="step1-title" data-elabel="Passo 1 Título">Consulta Personalizada</h3>
+                <p data-eid="step1-desc" data-elabel="Passo 1 Texto">Nos conta seus sonhos, a data desejada e o orçamento. Uma conversa rápida no WhatsApp é o suficiente para começarmos.</p>
+            </div>
+            <div class="step rv">
+                <div class="step-num">2</div>
+                <h3 data-eid="step2-title" data-elabel="Passo 2 Título">Proposta Exclusiva</h3>
+                <p data-eid="step2-desc" data-elabel="Passo 2 Texto">Montamos um roteiro 100% personalizado com os melhores voos, hotéis e opções de milhas para o seu perfil e orçamento.</p>
+            </div>
+            <div class="step rv">
+                <div class="step-num">3</div>
+                <h3 data-eid="step3-title" data-elabel="Passo 3 Título">Embarque Tranquilo</h3>
+                <p data-eid="step3-desc" data-elabel="Passo 3 Texto">Cuidamos de passagens, hospedagem, visto e suporte completo. Você só precisa fazer as malas e desfrutar cada momento.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ════════════ DESTINOS ════════════ -->
+<section class="section dest-bg" id="destinos">
+    <div class="container">
+        <div class="dest-hdr rv">
+            <div>
+                <span class="label">Pacotes</span>
+                <h2 class="h2" data-eid="dest-title" data-elabel="Título Destinos">Destinos incríveis esperando<br>pela sua próxima aventura</h2>
+            </div>
+            <a href="#contato" class="btn btn-navy" style="flex-shrink:0">Ver Todos <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+        <div class="cards-grid">
+
+            <a href="pacote.html?id=fortaleza" class="card-link rv">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1564419320461-6870880221ad?auto=format&fit=crop&w=700&q=80" alt="Fortaleza" loading="lazy" decoding="async" data-eid="card1-img" data-elabel="Foto Fortaleza">
+                    <div class="card-flag" data-eid="card1-flag" data-elabel="País Fortaleza">Brasil 🇧🇷</div>
+                    <div class="card-overlay"><span>Ver pacote <i class="fa-solid fa-arrow-right"></i></span></div>
+                </div>
+                <div class="card-body">
+                    <div class="card-loc" data-eid="card1-loc" data-elabel="Local Fortaleza"><i class="fa-solid fa-location-dot"></i> Ceará, Brasil</div>
+                    <h3 data-eid="card1-title" data-elabel="Título Fortaleza">Fortaleza & Jericoacoara</h3>
+                    <div class="card-foot">
+                        <div class="card-price" data-eid="card1-price" data-elabel="Preço Fortaleza">R$ 2.190 <small>/ pessoa</small></div>
+                        <span class="card-arrow">Saiba mais <i class="fa-solid fa-arrow-right"></i></span>
+                    </div>
+                </div>
+            </a>
+
+            <a href="pacote.html?id=orlando" class="card-link rv">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1568092816214-02404ef89f59?auto=format&fit=crop&w=700&q=80" alt="Orlando Disney" loading="lazy" decoding="async" data-eid="card2-img" data-elabel="Foto Orlando">
+                    <div class="card-flag" data-eid="card2-flag" data-elabel="País Orlando">EUA 🇺🇸</div>
+                    <div class="card-overlay"><span>Ver pacote <i class="fa-solid fa-arrow-right"></i></span></div>
+                </div>
+                <div class="card-body">
+                    <div class="card-loc" data-eid="card2-loc" data-elabel="Local Orlando"><i class="fa-solid fa-location-dot"></i> Orlando, Florida, EUA</div>
+                    <h3 data-eid="card2-title" data-elabel="Título Orlando">Orlando & Disney</h3>
+                    <div class="card-foot">
+                        <div class="card-price" data-eid="card2-price" data-elabel="Preço Orlando">R$ 8.900 <small>/ pessoa</small></div>
+                        <span class="card-arrow">Saiba mais <i class="fa-solid fa-arrow-right"></i></span>
+                    </div>
+                </div>
+            </a>
+
+            <a href="pacote.html?id=olimpia" class="card-link rv">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=700&q=80" alt="Olímpia Resort" loading="lazy" decoding="async" data-eid="card3-img" data-elabel="Foto Olímpia">
+                    <div class="card-flag" data-eid="card3-flag" data-elabel="País Olímpia">Brasil 🇧🇷</div>
+                    <div class="card-overlay"><span>Ver pacote <i class="fa-solid fa-arrow-right"></i></span></div>
+                </div>
+                <div class="card-body">
+                    <div class="card-loc" data-eid="card3-loc" data-elabel="Local Olímpia"><i class="fa-solid fa-location-dot"></i> Olímpia, São Paulo</div>
+                    <h3 data-eid="card3-title" data-elabel="Título Olímpia">Olímpia — Hot Park Resort</h3>
+                    <div class="card-foot">
+                        <div class="card-price" data-eid="card3-price" data-elabel="Preço Olímpia">R$ 1.890 <small>/ pessoa</small></div>
+                        <span class="card-arrow">Saiba mais <i class="fa-solid fa-arrow-right"></i></span>
+                    </div>
+                </div>
+            </a>
+
+            <a href="pacote.html?id=lasvegas" class="card-link rv">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1605833556294-ea5c7a74f57d?auto=format&fit=crop&w=700&q=80" alt="Las Vegas" loading="lazy" decoding="async" data-eid="card4-img" data-elabel="Foto Las Vegas">
+                    <div class="card-flag" data-eid="card4-flag" data-elabel="País Las Vegas">EUA 🇺🇸</div>
+                    <div class="card-overlay"><span>Ver pacote <i class="fa-solid fa-arrow-right"></i></span></div>
+                </div>
+                <div class="card-body">
+                    <div class="card-loc" data-eid="card4-loc" data-elabel="Local Las Vegas"><i class="fa-solid fa-location-dot"></i> Nevada & Califórnia, EUA</div>
+                    <h3 data-eid="card4-title" data-elabel="Título Las Vegas">Las Vegas + Los Angeles</h3>
+                    <div class="card-foot">
+                        <div class="card-price" data-eid="card4-price" data-elabel="Preço Las Vegas">R$ 9.490 <small>/ pessoa</small></div>
+                        <span class="card-arrow">Saiba mais <i class="fa-solid fa-arrow-right"></i></span>
+                    </div>
+                </div>
+            </a>
+
+            <a href="pacote.html?id=portogalinhas" class="card-link rv">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&w=700&q=80" alt="Porto de Galinhas" loading="lazy" decoding="async" data-eid="card5-img" data-elabel="Foto Porto de Galinhas">
+                    <div class="card-flag" data-eid="card5-flag" data-elabel="País Porto de Galinhas">Brasil 🇧🇷</div>
+                    <div class="card-overlay"><span>Ver pacote <i class="fa-solid fa-arrow-right"></i></span></div>
+                </div>
+                <div class="card-body">
+                    <div class="card-loc" data-eid="card5-loc" data-elabel="Local Porto de Galinhas"><i class="fa-solid fa-location-dot"></i> Pernambuco, Brasil</div>
+                    <h3 data-eid="card5-title" data-elabel="Título Porto de Galinhas">Porto de Galinhas</h3>
+                    <div class="card-foot">
+                        <div class="card-price" data-eid="card5-price" data-elabel="Preço Porto de Galinhas">R$ 2.890 <small>/ pessoa</small></div>
+                        <span class="card-arrow">Saiba mais <i class="fa-solid fa-arrow-right"></i></span>
+                    </div>
+                </div>
+            </a>
+
+            <a href="pacote.html?id=cancun" class="card-link rv">
+                <div class="card-img">
+                    <img src="https://images.unsplash.com/photo-1552074284-5e88ef1aef18?auto=format&fit=crop&w=700&q=80" alt="Cancún" loading="lazy" decoding="async" data-eid="card6-img" data-elabel="Foto Cancún">
+                    <div class="card-flag" data-eid="card6-flag" data-elabel="País Cancún">México 🇲🇽</div>
+                    <div class="card-overlay"><span>Ver pacote <i class="fa-solid fa-arrow-right"></i></span></div>
+                </div>
+                <div class="card-body">
+                    <div class="card-loc" data-eid="card6-loc" data-elabel="Local Cancún"><i class="fa-solid fa-location-dot"></i> Cancún, México</div>
+                    <h3 data-eid="card6-title" data-elabel="Título Cancún">Cancún — All Inclusive</h3>
+                    <div class="card-foot">
+                        <div class="card-price" data-eid="card6-price" data-elabel="Preço Cancún">R$ 5.990 <small>/ pessoa</small></div>
+                        <span class="card-arrow">Saiba mais <i class="fa-solid fa-arrow-right"></i></span>
+                    </div>
+                </div>
+            </a>
+
+        </div>
+    </div>
+</section>
+
+<!-- ════════════ DIFERENCIAIS ════════════ -->
+<section class="section" id="diferenciais">
+    <div class="container">
+        <div class="dif-grid">
+            <div class="dif-img-wrap rv">
+                <img src="https://images.unsplash.com/photo-1539635278303-d4002c07dee3?auto=format&fit=crop&w=800&q=80" alt="Viajante Me Guia Viagens" class="dif-img" loading="lazy" data-eid="dif-img" data-elabel="Foto Diferenciais">
+                <div class="dif-badge" data-eid="dif-badge" data-elabel="Badge Diferenciais"><strong>100%</strong><small>Satisfação Garantida</small></div>
+            </div>
+            <div class="rv">
+                <span class="label">Por que escolher a Me Guia</span>
+                <h2 class="h2" data-eid="dif-title" data-elabel="Título Diferenciais">Atendimento personalizado<br>do início ao fim da viagem</h2>
+                <p class="lead" data-eid="dif-sub" data-elabel="Subtítulo Diferenciais">A Aline cuida de cada detalhe com carinho e uma organização que realmente faz toda a diferença — desde os melhores assentos no avião até os horários ideais nas conexões. É muito mais do que uma viagem, é uma experiência completa.</p>
+                <div class="dif-list">
+                    <div class="dif-item">
+                        <div class="dif-icon"><i class="fa-solid fa-credit-card"></i></div>
+                        <div><h4 data-eid="dif-item1-title" data-elabel="Diferencial 1 Título">Especialistas em Milhas Aéreas</h4><p data-eid="dif-item1-desc" data-elabel="Diferencial 1 Texto">Estratégias inteligentes com seus pontos e milhas para que você voe mais pagando muito menos.</p></div>
+                    </div>
+                    <div class="dif-item">
+                        <div class="dif-icon"><i class="fa-solid fa-passport"></i></div>
+                        <div><h4 data-eid="dif-item2-title" data-elabel="Diferencial 2 Título">Auxílio Completo no Visto Americano</h4><p data-eid="dif-item2-desc" data-elabel="Diferencial 2 Texto">Formulários, agendamento, orientação e suporte em cada etapa para você conseguir seu visto com tranquilidade.</p></div>
+                    </div>
+                    <div class="dif-item">
+                        <div class="dif-icon"><i class="fa-solid fa-hotel"></i></div>
+                        <div><h4 data-eid="dif-item3-title" data-elabel="Diferencial 3 Título">Curadoria de Resorts & Hotéis</h4><p data-eid="dif-item3-desc" data-elabel="Diferencial 3 Texto">Acesso aos melhores resorts no Brasil e exterior com promoções e condições exclusivas para nossos clientes.</p></div>
+                    </div>
+                    <div class="dif-item">
+                        <div class="dif-icon"><i class="fa-solid fa-plane-departure"></i></div>
+                        <div><h4 data-eid="dif-item4-title" data-elabel="Diferencial 4 Título">Bloqueios Aéreos & Voos Promocionais</h4><p data-eid="dif-item4-desc" data-elabel="Diferencial 4 Texto">Acesso antecipado a tarifas de grupo e voos com preços abaixo do mercado, antes de esgotar.</p></div>
+                    </div>
+                </div>
+                <a href="#contato" class="btn btn-accent" style="display:inline-flex;align-items:center;gap:8px;margin-top:24px;">
+                    Falar com a Aline <i class="fa-solid fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ════════════ DEPOIMENTOS ════════════ -->
+<section class="section dep-bg" id="depoimentos">
+    <div class="container">
+        <div class="dep-hdr rv">
+            <span class="label">Depoimentos</span>
+            <h2 class="h2" data-eid="dep-title" data-elabel="Título Depoimentos">O que nossos viajantes dizem</h2>
+            <p class="lead" data-eid="dep-sub" data-elabel="Subtítulo Depoimentos">Histórias reais de clientes que confiaram na Me Guia Viagens e voltaram com memórias inesquecíveis.</p>
+        </div>
+        <div class="dep-grid">
+            <div class="dep-card rv">
+                <div class="dep-stars">★★★★★</div>
+                <p class="dep-text" data-eid="dep-1-text" data-elabel="Depoimento 1">"Minha viagem para Fortaleza foi simplesmente incrível! E eu não posso deixar de falar o quanto a Me Guia fez toda a diferença. Desde o início, todos os detalhes foram muito bem planejados e pensados, com um cuidado e um carinho em cada etapa que foram simplesmente maravilhosos. Isso trouxe muita tranquilidade pra gente e fez com que pudéssemos aproveitar cada momento sem preocupação."</p>
+                <div class="dep-author">
+                    <div class="dep-av"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" alt="Cintia" data-eid="dep-1-foto" data-elabel="Foto Depoimento 1"></div>
+                    <div><div class="dep-name" data-eid="dep-1-nome" data-elabel="Nome Depoimento 1">Cintia</div><div class="dep-dest" data-eid="dep-1-dest" data-elabel="Destino Depoimento 1">Marília, SP — Fortaleza</div></div>
+                </div>
+            </div>
+            <div class="dep-card rv">
+                <div class="dep-stars">★★★★★</div>
+                <p class="dep-text" data-eid="dep-2-text" data-elabel="Depoimento 2">"A Agência realizou todo o procedimento para obtermos o Visto Americano desde o preenchimento dos Formulários e agendamentos, ficamos muito satisfeitos com a atenção e profissionalismo. Recomendamos."</p>
+                <div class="dep-author">
+                    <div class="dep-av"><img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80" alt="Josane" data-eid="dep-2-foto" data-elabel="Foto Depoimento 2"></div>
+                    <div><div class="dep-name" data-eid="dep-2-nome" data-elabel="Nome Depoimento 2">Josane</div><div class="dep-dest" data-eid="dep-2-dest" data-elabel="Destino Depoimento 2">Castro, PR — Visto Americano</div></div>
+                </div>
+            </div>
+            <div class="dep-card dep-card-full rv">
+                <div class="dep-stars">★★★★★</div>
+                <p class="dep-text" data-eid="dep-3-text" data-elabel="Depoimento 3">"Ir para Orlando, para a Disney, nunca foi nem um sonho para mim… mas com a Me Guia, eu pude sonhar e realizar! Minhas viagens têm roteiros em Las Vegas, Orlando, São Francisco e Santa Mônica — tudo planejado com um cuidado impecável. A Aline cuida de cada detalhe com carinho e uma organização que realmente faz toda a diferença: desde a escolha dos melhores assentos no avião até os horários ideais para não precisar correr nas conexões. É muito mais do que uma viagem — é uma experiência completa. E se você precisar de suporte, até na sala VIP ela te guia! Sem contar a ajuda com os pontos do cartão, que faz tudo ficar ainda mais acessível. Indico e recomendo de olhos fechados — simplesmente a melhor!"</p>
+                <div class="dep-author">
+                    <div class="dep-av"><img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=100&q=80" alt="Ana Paula" data-eid="dep-3-foto" data-elabel="Foto Depoimento 3"></div>
+                    <div><div class="dep-name" data-eid="dep-3-nome" data-elabel="Nome Depoimento 3">Ana Paula</div><div class="dep-dest" data-eid="dep-3-dest" data-elabel="Destino Depoimento 3">Castro, PR — Orlando, Las Vegas & Califórnia</div></div>
+                </div>
+            </div>
+        </div>
+        <div style="text-align:center;margin-top:40px;" class="rv">
+            <div class="dep-card" style="display:inline-block;max-width:600px;background:rgba(255,255,255,.06);">
+                <div class="dep-stars">★★★★★</div>
+                <p class="dep-text" data-eid="dep-4-text" data-elabel="Depoimento 4">"A viagem em família para Olímpia foi simplesmente perfeita. Desde as acomodações que eram impecáveis e com todo conforto que a nossa família precisava para aproveitar. Fomos com nossos 3 filhos que ficaram encantados com o resort e suas dependências. O carinho e cuidado da Me Guia foi essencial pra tornar essa experiência ainda melhor. Com certeza fecharemos novas férias com vocês, muito obrigado pela incrível experiência."</p>
+                <div class="dep-author">
+                    <div class="dep-av"><img src="https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?auto=format&fit=crop&w=100&q=80" alt="Rodrigo" data-eid="dep-4-foto" data-elabel="Foto Depoimento 4"></div>
+                    <div><div class="dep-name" data-eid="dep-4-nome" data-elabel="Nome Depoimento 4">Rodrigo</div><div class="dep-dest" data-eid="dep-4-dest" data-elabel="Destino Depoimento 4">Marília, SP — Olímpia Resort (família)</div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ════════════ CONTATO ════════════ -->
+<section class="section contact-bg" id="contato">
+    <div class="container">
+        <div class="form-wrap">
+            <div class="form-left rv">
+                <span class="label">Orçamento Gratuito</span>
+                <h2 class="h2" data-eid="contato-title" data-elabel="Título Seção Contato">Fale com a Aline agora</h2>
+                <p data-eid="contato-sub" data-elabel="Subtítulo Seção Contato">Preencha o formulário e entraremos em contato rapidamente com uma proposta personalizada para a sua viagem dos sonhos.</p>
+                <div class="finfo">
+                    <div class="finfo-row">
+                        <div class="finfo-ico"><i class="fab fa-whatsapp"></i></div>
+                        <div><strong>WhatsApp</strong><span data-eid="info-whats" data-elabel="WhatsApp de Contato">Clique no botão verde →</span></div>
+                    </div>
+                    <div class="finfo-row">
+                        <div class="finfo-ico"><i class="fa-solid fa-globe"></i></div>
+                        <div><strong>Site</strong><span>meguiaviagens.com.br</span></div>
+                    </div>
+                    <div class="finfo-row">
+                        <div class="finfo-ico"><i class="fa-solid fa-clock"></i></div>
+                        <div><strong>Atendimento</strong><span data-eid="info-horario" data-elabel="Horário de Atendimento">Seg–Sex 8h–20h · Sáb 9h–16h</span></div>
+                    </div>
+                    <div class="finfo-row">
+                        <div class="finfo-ico"><i class="fa-solid fa-location-dot"></i></div>
+                        <div><strong>Atende todo o Brasil</strong><span>Atendimento 100% online</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-card rv">
+                <form id="form-orcamento" onsubmit="submitForm(event)">
+                    <div class="row2">
+                        <div class="ig"><label>Nome Completo</label><input id="f-nome" type="text" placeholder="Ex: Maria Silva" required></div>
+                        <div class="ig"><label>WhatsApp</label><input id="f-whats" type="tel" placeholder="(11) 99999-9999" required></div>
+                    </div>
+                    <div class="ig"><label>E-mail</label><input id="f-email" type="email" placeholder="seu@email.com" required></div>
+                    <div class="row2">
+                        <div class="ig">
+                            <label>Destino de Interesse</label>
+                            <select id="f-destino" required>
+                                <option value="">Selecione…</option>
+                                <option>Fortaleza / Jericoacoara</option>
+                                <option>Orlando &amp; Disney</option>
+                                <option>Las Vegas + Los Angeles</option>
+                                <option>Cancún / México</option>
+                                <option>Olímpia / São Paulo</option>
+                                <option>Porto de Galinhas</option>
+                                <option>Nordeste Brasileiro</option>
+                                <option>Visto Americano</option>
+                                <option>Estratégia de Milhas</option>
+                                <option>Outro destino</option>
+                            </select>
+                        </div>
+                        <div class="ig"><label>Nº de Viajantes</label><input id="f-adultos" type="number" min="1" value="2" required></div>
+                    </div>
+                    <div class="ig">
+                        <label>Vai com crianças?</label>
+                        <div style="display:flex;gap:12px;margin-top:4px;">
+                            <label style="display:flex;align-items:center;gap:7px;font-size:14px;font-weight:500;text-transform:none;letter-spacing:0;color:var(--text);cursor:pointer;">
+                                <input type="radio" name="criancas" value="sim" onchange="toggleCriancas(this)" style="width:auto;accent-color:var(--accent);"> Sim
+                            </label>
+                            <label style="display:flex;align-items:center;gap:7px;font-size:14px;font-weight:500;text-transform:none;letter-spacing:0;color:var(--text);cursor:pointer;">
+                                <input type="radio" name="criancas" value="nao" onchange="toggleCriancas(this)" checked style="width:auto;accent-color:var(--accent);"> Não
+                            </label>
+                        </div>
+                    </div>
+                    <div class="ig" id="campo-criancas" style="display:none;">
+                        <label>Idade(s) da(s) criança(s)</label>
+                        <input type="text" id="input-criancas" placeholder="Ex: 3 anos, 7 anos, 10 anos">
+                        <span style="font-size:11px;color:var(--muted);margin-top:5px;display:block;">Separe por vírgula se houver mais de uma criança.</span>
+                    </div>
+                    <div class="row2">
+                        <div class="ig"><label>Data de Ida</label><input id="f-ida" type="date" required></div>
+                        <div class="ig"><label>Data de Volta</label><input id="f-volta" type="date"></div>
+                    </div>
+                    <div class="ig"><label>Observações (opcional)</label><textarea id="f-obs" placeholder="Interesses especiais, ocasião, orçamento aproximado…"></textarea></div>
+                    <button type="submit" class="btn btn-accent btn-block" style="height:50px;font-size:15px;">
+                        <i class="fab fa-whatsapp"></i> Enviar pelo WhatsApp
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ════════════ FOOTER ════════════ -->
+<footer>
+    <div class="container">
+        <div class="ft-top">
+            <div class="ft-brand">
+                <a href="#home" class="logo">
+                    <img src="logo.png" alt="Me Guia Viagens" style="height:44px;width:auto;object-fit:contain;filter:brightness(0) invert(1);">
+                </a>
+                <p>Especialistas em promoções de hotéis e resorts, milhas aéreas, visto americano e bloqueios de voos para você viajar mais e melhor.</p>
+                <div class="ft-social">
+                    <a href="https://www.instagram.com/meguiaviagens" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://wa.me/554299732517" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    <a href="http://meguiaviagens.com.br" target="_blank" aria-label="Site"><i class="fa-solid fa-globe"></i></a>
+                </div>
+            </div>
+            <div>
+                <h5>Destinos</h5>
+                <div class="ft-links">
+                    <a href="pacote.html?id=fortaleza">Fortaleza & Jericoacoara</a>
+                    <a href="pacote.html?id=orlando">Orlando & Disney</a>
+                    <a href="pacote.html?id=olimpia">Olímpia Resort</a>
+                    <a href="pacote.html?id=lasvegas">Las Vegas + LA</a>
+                    <a href="pacote.html?id=cancun">Cancún All Inclusive</a>
+                    <a href="pacote.html?id=portogalinhas">Porto de Galinhas</a>
+                </div>
+            </div>
+            <div>
+                <h5>Serviços</h5>
+                <div class="ft-links">
+                    <a href="#servicos">Hotéis & Resorts</a>
+                    <a href="#servicos">Milhas Aéreas</a>
+                    <a href="#servicos">Visto Americano</a>
+                    <a href="#servicos">Bloqueios Aéreos</a>
+                    <a href="#como-funciona">Como Funciona</a>
+                    <a href="#depoimentos">Depoimentos</a>
+                </div>
+            </div>
+            <div>
+                <h5>Contato</h5>
+                <div class="ft-links">
+                    <a href="https://wa.me/554299732517"><i class="fab fa-whatsapp" style="color:var(--wa);margin-right:7px"></i>WhatsApp</a>
+                    <span><i class="fa-solid fa-globe" style="color:var(--accent);margin-right:7px"></i>meguiaviagens.com.br</span>
+                    <span><i class="fa-solid fa-clock" style="color:var(--accent);margin-right:7px"></i>Seg–Sex 8h–20h</span>
+                    <span><i class="fab fa-instagram" style="color:var(--accent);margin-right:7px"></i>@meguiaviagens</span>
+                    <a href="https://wa.me/554299732517?text=Ol%C3%A1!+Quero+receber+promo%C3%A7%C3%B5es+e+dicas+de+viagem!" target="_blank" style="display:flex;align-items:center;gap:8px;margin-top:10px;background:#25D366;color:#fff;padding:10px 16px;border-radius:10px;font-weight:700;text-decoration:none;font-size:.9rem;">
+                        <i class="fab fa-whatsapp" style="font-size:1.1rem;"></i> Receber Promoções
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="ft-bottom">
+            <span>© 2025 Me Guia Viagens · Todos os direitos reservados</span>
+            <span>Feito com <i class="fa-solid fa-heart" style="color:var(--accent)"></i> para quem ama viajar &nbsp;·&nbsp; <a href="admin/login.html" style="color:rgba(255,255,255,0.2);font-size:.75rem;text-decoration:none;" title="Admin">⚙</a></span>
+        </div>
+    </div>
+</footer>
+
+<a href="https://wa.me/554299732517" class="wa" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+
+<script>
+    // ── Logo filter (transparente no topo, colorida no solid) ──
+    const hdr = document.getElementById('header');
+    const logoImg = document.getElementById('logo-img');
+    window.addEventListener('scroll', () => {
+        const solid = scrollY > 48;
+        hdr.classList.toggle('solid', solid);
+        if (logoImg) logoImg.style.filter = solid ? 'none' : 'brightness(0) invert(1)';
+    }, {passive:true});
+
+    // ── Mobile menu ──
+    const burger = document.getElementById('burger');
+    const panel  = document.getElementById('mobile-panel');
+    burger.addEventListener('click', () => {
+        burger.classList.toggle('open');
+        panel.classList.toggle('open');
+    });
+    function closePanel() {
+        burger.classList.remove('open');
+        panel.classList.remove('open');
+    }
+
+    // ── Reveal on scroll ──
+    const obs = new IntersectionObserver((entries) => {
+        entries.forEach((e, i) => {
+            if (e.isIntersecting) {
+                setTimeout(() => e.target.classList.add('on'), i * 70);
+                obs.unobserve(e.target);
+            }
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -36px 0px' });
+    document.querySelectorAll('.rv').forEach(el => obs.observe(el));
+
+    // ── Crianças toggle ──
+    window.toggleCriancas = function(radio) {
+        const campo = document.getElementById('campo-criancas');
+        const input = document.getElementById('input-criancas');
+        const show  = radio.value === 'sim';
+        campo.style.display = show ? 'block' : 'none';
+        input.required = show;
+        if (!show) input.value = '';
+    };
+
+    // ── Form → WhatsApp ──
+    function submitForm(e) {
+        e.preventDefault();
+
+        const nome    = document.getElementById('f-nome').value.trim();
+        const whats   = document.getElementById('f-whats').value.trim();
+        const email   = document.getElementById('f-email').value.trim();
+        const destino = document.getElementById('f-destino').value;
+        const adultos = document.getElementById('f-adultos').value;
+        const ida     = document.getElementById('f-ida').value;
+        const volta   = document.getElementById('f-volta').value;
+        const obs     = document.getElementById('f-obs').value.trim();
+
+        const temCrianca = document.querySelector('input[name="criancas"]:checked').value === 'sim';
+        const idadeCriancas = temCrianca ? document.getElementById('input-criancas').value.trim() : '';
+
+        function fmtData(d) {
+            if (!d) return '—';
+            const [y, m, dd] = d.split('-');
+            return `${dd}/${m}/${y}`;
+        }
+
+        let viajantes = `${adultos} adulto${adultos > 1 ? 's' : ''}`;
+        if (temCrianca && idadeCriancas) {
+            const ids = idadeCriancas.split(',').map(s => s.trim()).filter(Boolean);
+            viajantes += ` + ${ids.length} criança${ids.length > 1 ? 's' : ''} (${ids.join(', ')})`;
+        } else if (temCrianca) {
+            viajantes += ' + crianças';
+        }
+
+        const linhas = [
+            `Ola, *Me Guia Viagens!* ✈️`,
+            ``,
+            `Quero solicitar uma cotacao para:`,
+            ``,
+            `*Destino/Servico:* ${destino}`,
+            ``,
+            `━━━━━━━━━━━━━━━━━`,
+            `*DADOS DO SOLICITANTE*`,
+            `━━━━━━━━━━━━━━━━━`,
+            `• *Nome:* ${nome}`,
+            `• *WhatsApp:* ${whats}`,
+            `• *E-mail:* ${email}`,
+            ``,
+            `━━━━━━━━━━━━━━━━━`,
+            `*DETALHES DA VIAGEM*`,
+            `━━━━━━━━━━━━━━━━━`,
+            `• *Destino:* ${destino}`,
+            `• *Viajantes:* ${viajantes}`,
+            `• *Data de Ida:* ${fmtData(ida)}`,
+            `• *Data de Volta:* ${volta ? fmtData(volta) : '---'}`,
+            obs ? `• *Observacoes:* ${obs}` : null,
+            ``,
+            `━━━━━━━━━━━━━━━━━`,
+            ``,
+            `Aguardo a *cotacao personalizada* com valores, hospedagem e itinerario.`,
+            ``,
+            `Como posso *prosseguir*?`
+        ].filter(l => l !== null).join('\n');
+
+        const url = `https://wa.me/554299732517?text=${encodeURIComponent(linhas)}`;
+
+        const btn = e.target.querySelector('[type=submit]');
+        btn.innerHTML = '<i class="fa-solid fa-check"></i> Redirecionando para o WhatsApp…';
+        btn.style.background = '#22c55e';
+        btn.disabled = true;
+
+        setTimeout(() => window.open(url, '_blank'), 600);
+    }
+</script>
+<!-- ═══ EDITOR VISUAL ═══ -->
+<script src="editor.js"></script>
+</body>
+</html>

@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pacote — Me Guia Viagens</title>
+    <meta name="description" content="Pacotes exclusivos com hotéis, voos e experiências. Me Guia Viagens — especialistas em milhas, resorts e visto americano.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&display=swap"></noscript>
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+    <link rel="icon" href="logo.png" type="image/png">
+
+    <script>
+    /* ── DADOS DA AGÊNCIA ── */
+    const SITE = {
+        nome:      'Me Guia Viagens',
+        whatsapp:  '554299732517',
+        email:     'contato@meguiaviagens.com.br',
+        tel:       'Consulte pelo WhatsApp'
+    };
+
+    /* ── BANCO DE DADOS DOS PACOTES ── */
+    const DB = {
+        fortaleza: {
+            title:    'Fortaleza & Jericoacoara',
+            subtitle: 'Sol, praias e dunas douradas do Nordeste',
+            location: 'Ceará, Brasil',
+            duration: '7 dias / 6 noites',
+            price:    '2.190,00',
+            parcelas: '10x de R$ 219',
+            flag:     'Brasil 🇧🇷',
+            images: [
+                'https://images.unsplash.com/photo-1564419320461-6870880221ad?auto=format&fit=crop&w=1200&q=80',
+                'https://images.unsplash.com/photo-1505118380757-91f5f5632de0?auto=format&fit=crop&w=1200&q=80',
+                'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1200&q=80'
+            ],
+            desc: 'Fortaleza é o portão de entrada para um dos Nordestes mais vibrantes e coloridos do Brasil. Praias de águas mornas, dunas que se confundem com o horizonte e uma gastronomia que encanta todo paladar. E logo ali, Jericoacoara — eleita uma das mais belas praias do mundo — com seu pôr do sol sobre a duna e a lagoa do paraíso que parece um espelho refletindo o céu. Uma experiência que transforma.',
+            incluso: [
+                'Passagem aérea ida e volta',
+                'Transfer aeroporto–hotel em Fortaleza',
+                'Transfer Fortaleza–Jericoacoara (van ou buggy)',
+                'Hospedagem 6 noites com café da manhã',
+                'Passeio à Lagoa do Paraíso',
+                'Passeio de buggy pelas dunas',
+                'City tour por Fortaleza',
+                'Guia local especializado'
+            ],
+            nao_incluso: ['Seguro viagem', 'Almoços e jantares', 'Passeios opcionais', 'Gorjetas'],
+            roteiro: [
+                { dia: '1º Dia', title: 'Chegada a Fortaleza', desc: 'Desembarque no aeroporto e transfer para o hotel na Praia do Futuro ou Meireles. Check-in e primeiro contato com o Nordeste.' },
+                { dia: '2º Dia', title: 'City Tour Fortaleza', desc: 'Visita ao Mercado Central, Catedral, Dragão do Mar e Praia de Iracema. À tarde, Praia do Futuro com barracas e a famosa tapioca.' },
+                { dia: '3º Dia', title: 'Praias do Litoral Leste', desc: 'Excursão para Aquiraz, Prainha, Iguape e Porto das Dunas (Beach Park para quem quiser). Piscinas naturais e águas cristalinas.' },
+                { dia: '4º Dia', title: 'Transfer para Jericoacoara', desc: 'Viagem até Jeri (aprox. 4h). Check-in na pousada. Tarde livre para explorar o vilarejo e assistir ao pôr do sol na duna.' },
+                { dia: '5º Dia', title: 'Lagoa do Paraíso', desc: 'Passeio imperdível à Lagoa do Paraíso — águas transparentes entre dunas douradas. Um dos cenários mais lindos do Brasil.' },
+                { dia: '6º Dia', title: 'Dunas e Lagoa Azul', desc: 'Passeio de buggy pelas dunas de Jericoacoara até a Lagoa Azul e Lagoa da Torta. Tarde livre na praia.' },
+                { dia: '7º Dia', title: 'Retorno', desc: 'Café da manhã, transfer de volta a Fortaleza e embarque para casa cheio de areia, sorrisos e memórias do Nordeste.' }
+            ]
+        },
+        orlando: {
+            title:    'Orlando & Disney',
+            subtitle: 'A magia que toda família merece viver',
+            location: 'Orlando, Florida, EUA',
+            duration: '9 dias / 8 noites',
+            price:    '8.900,00',
+            parcelas: '10x de R$ 890',
+            flag:     'EUA 🇺🇸',
+            images: [
+                'https://images.unsplash.com/photo-1568092816214-02404ef89f59?auto=format&fit=crop&w=1200&q=80',
+                'https://images.unsplash.com/photo-1576502200916-3808e07386a5?auto=format&fit=crop&w=1200&q=80',
+                'https://images.unsplash.com/photo-1622468696594-fc5d43b9b2c5?auto=format&fit=crop&w=1200&q=80'
+            ],
+            desc: 'Realize o sonho da família inteira no maior complexo de parques temáticos do mundo! Magic Kingdom, EPCOT, Hollywood Studios e Animal Kingdom — quatro mundos de magia e diversão que encantam crianças e adultos. A Me Guia cuida de cada detalhe: desde os melhores assentos no avião e os horários ideais das conexões até a escolha do hotel ideal para a sua família. Universal Studios e Sea World completam uma semana verdadeiramente inesquecível.',
+            incluso: [
+                'Passagem aérea internacional ida e volta',
+                'Transfer aeroporto–hotel',
+                'Hospedagem 8 noites (hotel indicado pela Aline)',
+                'Ingressos 4 parques Disney (Park Hopper)',
+                'Orientação pré-viagem completa',
+                'Estratégia com milhas para upgrade de assento',
+                'Suporte da Me Guia durante toda a viagem'
+            ],
+            nao_incluso: ['Seguro viagem (fortemente recomendado)', 'Refeições nos parques', 'Universal Studios e Sea World (opcionais)', 'Visto americano (auxílio disponível)', 'Gorjetas'],
+            roteiro: [
+                { dia: '1º Dia', title: 'Chegada em Orlando', desc: 'Desembarque no aeroporto internacional de Orlando, transfer para o hotel. Check-in e tarde livre para descanso e adaptação.' },
+                { dia: '2º Dia', title: 'Magic Kingdom', desc: 'O parque mais famoso do mundo! Cinderella Castle, Space Mountain, Haunted Mansion e o espetáculo de fogos da noite. Pura magia!' },
+                { dia: '3º Dia', title: 'EPCOT', desc: 'Future World com atrações tecnológicas incríveis e World Showcase com gastronomia e cultura de 11 países em um só lugar.' },
+                { dia: '4º Dia', title: 'Hollywood Studios', desc: "Galaxy's Edge (Star Wars), Toy Story Land, Tower of Terror e os shows incríveis. Um dia no coração do cinema e da ficção." },
+                { dia: '5º Dia', title: 'Animal Kingdom', desc: 'O parque da natureza e dos animais. Pandora — The World of Avatar, safari ao vivo com animais reais e shows imperdíveis.' },
+                { dia: '6º Dia', title: 'Universal Studios', desc: 'Harry Potter, Transformers, Jurassic World, Minions — um dia de diversão pura no parque que rivaliza com a Disney.' },
+                { dia: '7º Dia', title: 'Sea World + Dia Livre', desc: 'Manhã no Sea World com shows de orcas, golfinhos e montanhas-russas aquáticas. Tarde livre para descanso ou parque favorito.' },
+                { dia: '8º Dia', title: 'Disney Springs & Compras', desc: 'Manhã no Disney Springs para últimas compras, souvenirs e restaurantes temáticos. À tarde, preparativos para o retorno.' },
+                { dia: '9º Dia', title: 'Retorno ao Brasil', desc: 'Transfer ao aeroporto e voo de retorno com a família cheia de memórias, histórias e fotos que vão durar a vida toda.' }
+            ]
+        },
+        olimpia: {
+            title:    'Olímpia — Hot Park Resort',
+            subtitle: 'O resort aquático mais completo do Brasil',
+            location: 'Olímpia, São Paulo',
+            duration: '4 dias / 3 noites',
+            price:    '1.890,00',
+            parcelas: '10x de R$ 189',
+            flag:     'Brasil 🇧🇷',
+            images: [
+                'https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=1200&q=80',
+                'https://images.unsplash.com/photo-1564501049412-61c2a3083791?auto=format&fit=crop&w=1200&q=80',
+                'https://images.unsplash.com/photo-1540541338537-57e79de23a13?auto=format&fit=crop&w=1200&q=80'
+            ],
+            desc: 'Olímpia é a capital do turismo de lazer do interior de São Paulo, e o Hot Park é o coração dela. Mais de 60 atrações aquáticas, piscinas de ondas, toboáguas radicais e piscinas termais com águas que brotam naturalmente quentes da terra. Perfeito para famílias com crianças que vão ficar encantadas com as dependências do resort — exatamente como nossos clientes nos contam com muito carinho.',
+            incluso: [
+                'Hospedagem 3 noites em resort de categoria',
+                'Pensão completa (café, almoço e jantar)',
+                'Ingresso ao Hot Park (incluso nos resorts parceiros)',
+                'Acesso às atrações aquáticas e piscinas termais',
+                'Entretenimento noturno do resort',
+                'Transfer receptivo local'
+            ],
+            nao_incluso: ['Passagem (opcional: organizamos o traslado)', 'Seguro viagem', 'Consumações extras', 'Gorjetas'],
+            roteiro: [
+                { dia: '1º Dia', title: 'Chegada a Olímpia', desc: 'Check-in no resort, conhecer as instalações e primeiras horas de diversão nas piscinas termais. Jantar incluído.' },
+                { dia: '2º Dia', title: 'Hot Park — Dia Completo', desc: 'Dia inteiro no Hot Park com mais de 60 atrações. Toboáguas radicais, piscina de ondas, piscinas termais e rio lento. Um dia inesquecível para toda a família.' },
+                { dia: '3º Dia', title: 'Parque e Lazer Livre', desc: 'Manhã livre no resort desfrutando das piscinas. Tarde de lazer e relaxamento. Jantar especial com animação.' },
+                { dia: '4º Dia', title: 'Check-out e Retorno', desc: 'Café da manhã reforçado, check-out com calma e retorno para casa com a família descansada e feliz, e muita saudade.' }
+            ]
+        },
+        lasvegas: {
+            title:    'Las Vegas + Los Angeles',
+            subtitle: 'A costa oeste americana em uma viagem única',
+            location: 'Nevada & Califórnia, EUA',
+            duration: '10 dias / 9 noites',
+            price:    '9.490,00',
+            parcelas: '10x de R$ 949',
+            flag:     'EUA 🇺🇸',
+            images: [
+                'https://images.unsplash.com/photo-1605833556294-ea5c7a74f57d?auto=format&fit=crop&w=1200&q=80',
+                'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?auto=format&fit=crop&w=1200&q=80',
+                'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?auto=format&fit=crop&w=1200&q=80'
+            ],
+            desc: 'Uma das combinações mais épicas para quem quer ver os EUA de verdade: a adrenalina e o glamour de Las Vegas com a elegância californiana de Los Angeles. Shows mundiais na Strip, o Grand Canyon logo ali, a Santa Mônica Pier, Hollywood Boulevard, Beverly Hills e o pôr do sol na Pacific Coast Highway. Uma viagem que só a Me Guia monta com o cuidado e a personalização que você merece.',
+            incluso: [
+                'Passagem aérea internacional ida e volta',
+                'Transfer aeroporto–hotel em Las Vegas',
+                'Transfer Las Vegas–Los Angeles (voo ou ônibus panorâmico)',
+                'Hospedagem 9 noites (4 em Las Vegas + 5 em LA)',
+                'City tour Las Vegas Strip',
+                'Excursão ao Grand Canyon (opcional)',
+                'City tour Los Angeles: Hollywood, Beverly Hills, Santa Mônica',
+                'Estratégia com milhas para upgrade de assento'
+            ],
+            nao_incluso: ['Seguro viagem', 'Almoços e jantares', 'Shows em Las Vegas', 'Visto americano (auxílio disponível)', 'Gorjetas'],
+            roteiro: [
+                { dia: '1º Dia', title: 'Chegada em Las Vegas', desc: 'Desembarque e transfer para hotel na Strip. Primeiro passeio pela famosa Las Vegas Boulevard à noite. As luzes te esperam!' },
+                { dia: '2º Dia', title: 'Las Vegas Strip', desc: 'Dia explorando os cassinos temáticos mais famosos do mundo: Bellagio (fontes dançantes), Venetian, Caesars Palace e mais.' },
+                { dia: '3º Dia', title: 'Grand Canyon', desc: 'Excursão imperdível ao Grand Canyon — uma das 7 maravilhas naturais do mundo. Vistas que tiram o fôlego e ficam na memória.' },
+                { dia: '4º Dia', title: 'Fremont Street & Dia Livre', desc: 'Manhã na histórica Fremont Street com o show de luzes. Tarde livre para compras ou cassinos. Última noite em Las Vegas.' },
+                { dia: '5º Dia', title: 'Chegada em Los Angeles', desc: 'Transfer para Los Angeles. Check-in no hotel. Primeira tarde em Santa Mônica — o píer, a praia e o pôr do sol californianos.' },
+                { dia: '6º Dia', title: 'Hollywood & Beverly Hills', desc: 'Hollywood Boulevard (Calçada da Fama), Letreiro Hollywood, Beverly Hills e as mansões das celebridades. Tarde em Rodeo Drive.' },
+                { dia: '7º Dia', title: 'Universal Studios LA', desc: 'Dia no Universal Studios Hollywood com Harry Potter World, Jurassic Park, Fast & Furious e muito mais entretenimento.' },
+                { dia: '8º Dia', title: 'Venice Beach & Marina del Rey', desc: 'Manhã na artística Venice Beach, famosa pelos grafites, malabaristas e o calçadão à beira-mar. Tarde em Marina del Rey.' },
+                { dia: '9º Dia', title: 'Griffith Park & Compras', desc: 'Vista panorâmica de LA do Observatório Griffith Park. Tarde no The Grove ou Melrose Avenue para compras e souvenirs.' },
+                { dia: '10º Dia', title: 'Retorno ao Brasil', desc: 'Transfer ao aeroporto de Los Angeles e embarque de volta para o Brasil com histórias incríveis para contar.' }
+            ]
+        },
+        portogalinhas: {
+            title:    'Porto de Galinhas',
+            subtitle: 'A melhor praia do Brasil eleita por viajantes',
+            location: 'Pernambuco, Brasil',
+            duration: '6 dias / 5 noites',
+            price:    '2.890,00',
+            parcelas: '10x de R$ 289',
+            flag:     'Brasil 🇧🇷',
+            images: [
+                'https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&w=1200&q=80',
+                'https://images.unsplash.com/photo-1437482078695-73f5ca6c96e2?auto=format&fit=crop&w=1200&q=80',
+                'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80'
+            ],
+            desc: 'Eleita diversas vezes a melhor praia do Brasil, Porto de Galinhas encanta com suas famosas piscinas naturais formadas nos recifes de coral — onde é possível nadar entre peixinhos coloridos em águas rasas, mornas e cristalinas. Romântica para casais, maravilhosa para famílias, simplesmente inesquecível para todos. Um destino que fica no coração e faz você querer voltar.',
+            incluso: [
+                'Passagem aérea ida e volta',
+                'Transfer Recife–Porto de Galinhas (privativo)',
+                'Hospedagem 5 noites com café da manhã',
+                'Passeio de jangada nas piscinas naturais',
+                'Snorkel incluso no passeio',
+                'Passeio a Muro Alto e Lagoa de Muro Alto',
+                'Passeio a Praia dos Carneiros'
+            ],
+            nao_incluso: ['Seguro viagem', 'Almoços e jantares', 'Mergulho com cilindro (opcional)', 'Gorjetas'],
+            roteiro: [
+                { dia: '1º Dia', title: 'Chegada ao Recife', desc: 'Desembarque no Recife e transfer privativo para Porto de Galinhas (70km). Check-in e primeira caminhada pela orla ao pôr do sol.' },
+                { dia: '2º Dia', title: 'Piscinas Naturais de Jangada', desc: 'Passeio de jangada até as famosas piscinas naturais nos recifes. Nadar com peixinhos coloridos em águas rasas e cristalinas.' },
+                { dia: '3º Dia', title: 'Muro Alto e Maracaípe', desc: 'Passeio à deslumbrante Lagoa de Muro Alto (águas calmas e verdes) e Maracaípe, famosa pelo surf e caranguejos.' },
+                { dia: '4º Dia', title: 'Praia dos Carneiros', desc: 'Excursão para a romântica Praia dos Carneiros com passeio de barco e visita à charmosa igrejinha à beira-mar.' },
+                { dia: '5º Dia', title: 'Dia Livre', desc: 'Dia livre para revisitar as piscinas favoritas, alugar buggys, fazer compras nas lojas da vila ou só descansar.' },
+                { dia: '6º Dia', title: 'Retorno ao Recife', desc: 'Transfer para o Recife e embarque de volta com muitas memórias e saudades das mais belas piscinas do Brasil.' }
+            ]
+        },
+        cancun: {
+            title:    'Cancún All Inclusive',
+            subtitle: 'Paraíso caribenho com tudo pago',
+            location: 'Cancún, México',
+            duration: '7 dias / 6 noites',
+            price:    '5.990,00',
+            parcelas: '10x de R$ 599',
+            flag:     'México 🇲🇽',
+            images: [
+                'https://images.unsplash.com/photo-1552074284-5e88ef1aef18?auto=format&fit=crop&w=1200&q=80',
+                'https://images.unsplash.com/photo-1510097467424-192d713fd8b2?auto=format&fit=crop&w=1200&q=80',
+                'https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=1200&q=80'
+            ],
+            desc: 'Cancún é o destino perfeito para quem quer relaxar com tudo incluído no Caribe Mexicano. Praias de areia branca como talco, águas turquesa de tirar o fôlego, resorts 5 estrelas com comida e bebida ilimitadas, shows, entretenimento e excursões inríveis às ruínas maias de Chichén Itzá e Tulum. A Me Guia seleciona os melhores resorts para você desfrutar cada momento ao máximo.',
+            incluso: [
+                'Passagem aérea internacional ida e volta',
+                'Transfer aeroporto–resort',
+                'Hospedagem 6 noites no regime All Inclusive',
+                'Alimentação e bebidas ilimitadas no resort',
+                'Entretenimento diurno e noturno no resort',
+                'Excursão a Isla Mujeres (barco)',
+                'Estratégia com milhas para voo com desconto'
+            ],
+            nao_incluso: ['Seguro viagem', 'Excursão Chichén Itzá (opcional)', 'Excursão Tulum (opcional)', 'Passeios fora do resort', 'Gorjetas (recomendado)'],
+            roteiro: [
+                { dia: '1º Dia', title: 'Chegada em Cancún', desc: 'Desembarque no aeroporto internacional e transfer para o resort. Check-in e primeiras horas em um dos mais belos litorais do mundo.' },
+                { dia: '2º Dia', title: 'Praia e Resort', desc: 'Dia inteiro usufruindo do resort all inclusive: praia de areia branca, piscinas, esportes aquáticos e drinks ilimitados.' },
+                { dia: '3º Dia', title: 'Isla Mujeres', desc: 'Excursão de barco para a encantadora Ilha das Mulheres. Snorkel em recifes de coral, praias paradisíacas e village charmoso.' },
+                { dia: '4º Dia', title: 'Chichén Itzá (opcional)', desc: 'Excursão para uma das 7 maravilhas do mundo moderno. A pirâmide maia de Kukulcán e a história da civilização que dominou a região.' },
+                { dia: '5º Dia', title: 'Tulum (opcional)', desc: 'Ruínas maias com vista para o mar caribenho — único sítio arqueológico com vista para o Caribe. Tarde em Cenote Ik Kil.' },
+                { dia: '6º Dia', title: 'Dia Livre no Resort', desc: 'Último dia de relaxamento total. Praia, piscina, spa e os sabores da culinária mexicana e internacional do resort.' },
+                { dia: '7º Dia', title: 'Retorno ao Brasil', desc: 'Transfer ao aeroporto e voo de retorno do Caribe com a pele bronzeada, o coração cheio e muita vontade de voltar.' }
+            ]
+        }
+    };
+    </script>
+
+    <style>
+        /* ── RESET & BASE ── */
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --navy:      #1B3A8C;
+            --navy-dark: #0F2460;
+            --accent:    #E8B84B;
+            --accent-d:  #D4A030;
+            --gold:      #E8B84B;
+            --text:      #1A1F2E;
+            --muted:     #6B7280;
+            --bg:        #F8F9FC;
+            --white:     #FFFFFF;
+            --border:    #E5E9F2;
+            --wa:        #25D366;
+            --hh:        64px;
+            --r:         16px;
+            --rl:        24px;
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text',
+                         'Helvetica Neue', 'Segoe UI', Arial, sans-serif;
+            font-size: 16px; line-height: 1.5;
+            color: var(--text); background: var(--white);
+            overflow-x: hidden; -webkit-font-smoothing: antialiased;
+        }
+        img { display: block; max-width: 100%; }
+        a { text-decoration: none; color: inherit; }
+        .container { width: 100%; max-width: 1180px; margin: 0 auto; padding: 0 20px; }
+
+        /* ── TYPE ── */
+        .serif { font-family: 'Playfair Display', Georgia, serif; }
+        .label { display: inline-block; font-size: 11px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); margin-bottom: 10px; }
+        .h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem,3vw,2.3rem); font-weight: 700; color: var(--navy); line-height: 1.2; margin-bottom: 14px; }
+
+        /* ── BTN ── */
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 14px 26px; border-radius: 50px; font-size: 14px;
+            font-weight: 600; border: none; cursor: pointer; transition: all .22s;
+            font-family: inherit;
+        }
+        .btn-wa    { background: var(--wa); color: #fff; }
+        .btn-wa:hover { filter: brightness(1.08); transform: translateY(-2px); box-shadow: 0 8px 22px rgba(37,211,102,.35); }
+        .btn-navy  { background: var(--navy); color: #fff; }
+        .btn-navy:hover { background: var(--navy-dark); transform: translateY(-2px); }
+        .btn-outline { background: transparent; color: var(--navy); border: 1.5px solid var(--navy); }
+        .btn-outline:hover { background: var(--navy); color: #fff; }
+        .btn-accent { background: var(--accent); color: #fff; }
+        .btn-accent:hover { background: var(--accent-d); transform: translateY(-2px); box-shadow: 0 8px 22px rgba(232,184,75,.35); }
+        .btn-block  { width: 100%; justify-content: center; }
+
+        /* ════════════ HEADER ════════════ */
+        #header {
+            position: sticky; top: 0; height: var(--hh);
+            background: var(--white); border-bottom: 1px solid var(--border);
+            z-index: 900; display: flex; align-items: center;
+        }
+        .hdr-inner { height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+        .logo { display: flex; align-items: center; gap: 9px; }
+        .hdr-nav { display: flex; align-items: center; gap: 24px; }
+        .hdr-nav a { font-size: 13px; font-weight: 500; color: var(--muted); transition: color .2s; }
+        .hdr-nav a:hover { color: var(--accent); }
+        .burger { display: none; flex-direction: column; gap: 5px; padding: 5px; background: none; border: none; cursor: pointer; }
+        .burger span { display: block; width: 20px; height: 2px; background: var(--navy); border-radius: 2px; transition: all .3s; }
+        .burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+        .burger.open span:nth-child(2) { opacity: 0; }
+        .burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+        #mobile-panel { display: none; position: fixed; top: var(--hh); left: 0; right: 0; background: var(--white); padding: 14px 20px 24px; box-shadow: 0 8px 28px rgba(0,0,0,.1); z-index: 899; flex-direction: column; gap: 2px; }
+        #mobile-panel.open { display: flex; }
+        #mobile-panel a { padding: 12px 14px; font-size: 14px; font-weight: 600; color: var(--text); border-radius: 12px; }
+        #mobile-panel a:hover { background: var(--bg); color: var(--accent); }
+
+        /* ════════════ HERO MINI ════════════ */
+        .hero-mini {
+            background: var(--navy-dark);
+            padding: 52px 0 44px; color: #fff;
+        }
+        .breadcrumb { font-size: 12px; color: rgba(255,255,255,.5); margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+        .breadcrumb a { color: rgba(255,255,255,.5); transition: color .2s; }
+        .breadcrumb a:hover { color: var(--accent); }
+        .breadcrumb i { font-size: 9px; }
+        .hero-mini h1 { font-family: 'Playfair Display', serif; font-size: clamp(1.8rem,4vw,3rem); font-weight: 700; margin-bottom: 10px; }
+        .hero-mini-meta { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 16px; }
+        .meta-tag { display: flex; align-items: center; gap: 7px; font-size: 13px; color: rgba(255,255,255,.7); }
+        .meta-tag i { color: var(--accent); }
+
+        /* ════════════ LAYOUT ════════════ */
+        .pkg-layout { display: grid; grid-template-columns: 1fr 360px; gap: 40px; padding: 52px 0 80px; align-items: start; }
+
+        /* ── CARROSSEL ── */
+        .carousel { border-radius: var(--rl); overflow: hidden; margin-bottom: 36px; position: relative; }
+        .carousel-track { display: flex; transition: transform .42s cubic-bezier(.4,0,.2,1); }
+        .carousel-slide { flex: 0 0 100%; }
+        .carousel-slide img { width: 100%; height: 460px; object-fit: cover; display: block; }
+        .car-btn {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            width: 44px; height: 44px; border-radius: 50%;
+            background: rgba(255,255,255,.88); backdrop-filter: blur(8px);
+            border: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+            color: var(--navy); font-size: 14px; transition: all .2s; z-index: 2;
+            box-shadow: 0 4px 14px rgba(0,0,0,.15);
+        }
+        .car-btn:hover { background: var(--accent); color: #fff; }
+        .car-prev { left: 14px; }
+        .car-next { right: 14px; }
+        .car-dots { display: flex; justify-content: center; gap: 8px; padding: 14px 0 0; }
+        .car-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); cursor: pointer; transition: all .2s; }
+        .car-dot.on { background: var(--accent); width: 24px; border-radius: 4px; }
+        .thumbnails { display: flex; gap: 10px; margin-top: 12px; }
+        .thumb { flex: 1; height: 72px; border-radius: 10px; overflow: hidden; cursor: pointer; border: 2px solid transparent; transition: border .2s, opacity .2s; opacity: .65; }
+        .thumb img { width: 100%; height: 100%; object-fit: cover; }
+        .thumb.on { border-color: var(--accent); opacity: 1; }
+
+        /* ── CONTENT BLOCKS ── */
+        .cblock { border: 1px solid var(--border); border-radius: var(--rl); padding: 32px; margin-bottom: 28px; background: var(--white); }
+        .cblock-title {
+            font-size: 1.05rem; font-weight: 700; color: var(--navy);
+            border-left: 4px solid var(--accent); padding-left: 14px;
+            margin-bottom: 20px;
+        }
+        .pkg-desc { font-size: 15px; color: var(--muted); line-height: 1.8; }
+        .incluso-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+        .incluso-list li { display: flex; align-items: center; gap: 10px; font-size: 14px; color: var(--text); }
+        .incluso-list li i { color: var(--wa); font-size: 13px; flex-shrink: 0; }
+        .nao-incluso-list { list-style: none; display: flex; flex-direction: column; gap: 8px; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
+        .nao-incluso-list li { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--muted); }
+        .nao-incluso-list li i { color: #f87171; font-size: 12px; flex-shrink: 0; }
+        .nao-incluso-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-top: 14px; margin-bottom: 4px; display: block; }
+
+        /* roteiro */
+        .roteiro-item { display: flex; gap: 16px; margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--border); }
+        .roteiro-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        .roteiro-day { flex-shrink: 0; text-align: center; }
+        .roteiro-day-num { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; color: var(--accent); line-height: 1; }
+        .roteiro-day-lbl { font-size: 10px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+        .roteiro-body h4 { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 4px; }
+        .roteiro-body p  { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+        /* ── SIDEBAR ── */
+        .sidebar { position: sticky; top: calc(var(--hh) + 20px); }
+        .price-card {
+            border: 1px solid var(--border); border-radius: var(--rl);
+            padding: 32px 28px; box-shadow: 0 8px 32px rgba(27,58,140,.09);
+            background: var(--white);
+        }
+        .price-from { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+        .price-num  { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 700; color: var(--navy); line-height: 1; margin-bottom: 6px; }
+        .price-acc  { font-size: 13px; color: var(--accent); font-weight: 600; margin-bottom: 28px; }
+        .price-meta { display: flex; flex-direction: column; gap: 10px; margin-bottom: 28px; padding: 20px; background: var(--bg); border-radius: var(--r); }
+        .pm-row     { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text); }
+        .pm-row i   { color: var(--accent); width: 16px; text-align: center; flex-shrink: 0; }
+        .price-card .btn { width: 100%; justify-content: center; margin-bottom: 10px; height: 50px; font-size: 15px; }
+        .price-note { font-size: 11px; color: var(--muted); text-align: center; margin-top: 10px; }
+
+        /* ════════════ OUTROS DESTINOS ════════════ */
+        .outros { background: var(--bg); padding: 72px 0; }
+        .outros-hdr { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin-bottom: 36px; }
+        .cards-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; }
+
+        .card-link {
+            display: block; border-radius: var(--r); overflow: hidden;
+            background: var(--white); box-shadow: 0 3px 14px rgba(0,0,0,.06);
+            transition: all .3s; color: inherit;
+        }
+        .card-link:hover { transform: translateY(-8px); box-shadow: 0 16px 40px rgba(0,0,0,.12); }
+        .card-img { position: relative; height: 180px; overflow: hidden; }
+        .card-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .45s; }
+        .card-link:hover .card-img img { transform: scale(1.07); }
+        .card-flag { position: absolute; top: 10px; left: 10px; background: rgba(255,255,255,.92); backdrop-filter: blur(6px); padding: 3px 10px; border-radius: 50px; font-size: 10px; font-weight: 700; color: var(--navy); text-transform: uppercase; letter-spacing: .05em; }
+        .card-body { padding: 16px; }
+        .card-loc  { display: flex; align-items: center; gap: 4px; font-size: 11px; color: var(--muted); margin-bottom: 5px; }
+        .card-loc i { color: var(--accent); font-size: 10px; }
+        .card-body h3 { font-size: 14px; font-weight: 700; color: var(--navy); margin-bottom: 10px; }
+        .card-foot { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border); padding-top: 12px; }
+        .card-price { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; color: var(--accent); }
+        .card-price small { font-family: -apple-system, sans-serif; font-size: 10px; color: var(--muted); font-weight: 400; }
+        .card-arr { font-size: 11px; color: var(--navy); font-weight: 600; display: flex; align-items: center; gap: 4px; transition: gap .2s, color .2s; }
+        .card-link:hover .card-arr { gap: 8px; color: var(--accent); }
+
+        /* ════════════ FOOTER ════════════ */
+        footer { background: var(--navy-dark); color: rgba(255,255,255,.5); padding: 64px 0 0; }
+        .ft-top { display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 48px; padding-bottom: 48px; }
+        .ft-brand p { font-size: 13px; line-height: 1.7; margin-top: 14px; max-width: 240px; }
+        footer h5 { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: rgba(255,255,255,.35); margin-bottom: 18px; }
+        .ft-links { display: flex; flex-direction: column; gap: 10px; }
+        .ft-links a, .ft-links span { font-size: 13px; color: rgba(255,255,255,.58); transition: color .2s; }
+        .ft-links a:hover { color: var(--accent); }
+        .ft-social { display: flex; gap: 10px; margin-top: 6px; }
+        .ft-social a { width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(255,255,255,.14); display: flex; align-items: center; justify-content: center; color: rgba(255,255,255,.55); font-size: 13px; transition: all .2s; }
+        .ft-social a:hover { background: var(--accent); border-color: var(--accent); color: #fff; }
+        .ft-bottom { border-top: 1px solid rgba(255,255,255,.07); padding: 20px 0; display: flex; justify-content: space-between; align-items: center; font-size: 12px; gap: 12px; }
+
+        /* ── WA FLOAT ── */
+        .wa { position: fixed; bottom: 22px; right: 22px; width: 54px; height: 54px; background: var(--wa); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 1.45rem; z-index: 888; box-shadow: 0 6px 18px rgba(37,211,102,.42); transition: transform .25s; }
+        .wa:hover { transform: scale(1.12); }
+        .wa::before { content: ''; position: absolute; inset: -6px; border-radius: 50%; background: rgba(37,211,102,.22); animation: wap 2s infinite; }
+        @keyframes wap { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.35);opacity:0} }
+
+        /* ════════════ RESPONSIVE ════════════ */
+        @media(max-width:900px) {
+            .pkg-layout { grid-template-columns: 1fr; }
+            .sidebar { position: static; }
+            .cards-row { grid-template-columns: repeat(2,1fr); }
+        }
+        @media(max-width:768px) {
+            :root { --hh: 58px; }
+            .hdr-nav  { display: none; }
+            .hdr-cta  { display: none; }
+            .burger   { display: flex; }
+            .carousel-slide img { height: 280px; }
+            .thumbnails { gap: 7px; }
+            .thumb { height: 56px; }
+            .ft-top { grid-template-columns: 1fr 1fr; gap: 28px; }
+            .ft-bottom { flex-direction: column; text-align: center; }
+            .outros-hdr { flex-direction: column; align-items: flex-start; }
+        }
+        @media(max-width:480px) {
+            .container { padding: 0 16px; }
+            .carousel-slide img { height: 240px; }
+            .cards-row { grid-template-columns: 1fr; }
+            .cblock { padding: 22px 18px; }
+            .price-card { padding: 24px 20px; }
+            .pkg-layout { padding: 32px 0 60px; }
+            .ft-top { grid-template-columns: 1fr; gap: 24px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ════════════ HEADER ════════════ -->
+<header id="header">
+    <div class="container">
+        <div class="hdr-inner">
+            <a href="index.html" class="logo">
+                <img src="logo.png" alt="Me Guia Viagens" style="height:46px;width:auto;max-width:160px;object-fit:contain;">
+            </a>
+            <nav class="hdr-nav">
+                <a href="index.html">Início</a>
+                <a href="index.html#destinos">Destinos</a>
+                <a href="index.html#servicos">Serviços</a>
+                <a href="index.html#diferenciais">Por Que Nós</a>
+                <a href="index.html#contato">Orçamento</a>
+            </nav>
+            <div class="hdr-cta">
+                <a href="https://wa.me/554299732517" class="btn btn-accent" style="padding:10px 20px;font-size:13px;">
+                    <i class="fab fa-whatsapp"></i> WhatsApp
+                </a>
+            </div>
+            <button class="burger" id="burger" aria-label="Menu">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </div>
+</header>
+<nav id="mobile-panel">
+    <a href="index.html">Início</a>
+    <a href="index.html#destinos">Destinos</a>
+    <a href="index.html#servicos">Serviços</a>
+    <a href="index.html#diferenciais">Por Que Nós</a>
+    <a href="index.html#contato">Orçamento</a>
+    <a href="https://wa.me/554299732517" style="margin-top:8px;background:var(--wa);color:#fff;border-radius:50px;text-align:center;padding:13px;">
+        <i class="fab fa-whatsapp"></i> Falar no WhatsApp
+    </a>
+</nav>
+
+<!-- ════════════ HERO MINI ════════════ -->
+<div class="hero-mini">
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="index.html">Início</a>
+            <i class="fa-solid fa-chevron-right"></i>
+            <a href="index.html#destinos">Destinos</a>
+            <i class="fa-solid fa-chevron-right"></i>
+            <span id="breadcrumb-title">Carregando…</span>
+        </div>
+        <h1 id="pkg-title" data-eid="pkg-title" data-elabel="Título Pacote">Carregando…</h1>
+        <p id="pkg-subtitle" data-eid="pkg-subtitle" data-elabel="Subtítulo Pacote" style="color:rgba(255,255,255,.65);font-size:1.05rem;margin-top:8px;"></p>
+        <div class="hero-mini-meta">
+            <div class="meta-tag"><i class="fa-solid fa-location-dot"></i><span id="meta-loc" data-eid="pkg-loc" data-elabel="Localização">—</span></div>
+            <div class="meta-tag"><i class="fa-solid fa-moon"></i><span id="meta-dur" data-eid="pkg-dur" data-elabel="Duração">—</span></div>
+            <div class="meta-tag"><i class="fa-solid fa-star"></i> Curadoria Me Guia</div>
+        </div>
+    </div>
+</div>
+
+<!-- ════════════ CONTEÚDO ════════════ -->
+<div class="container">
+    <div class="pkg-layout">
+
+        <!-- COLUNA PRINCIPAL -->
+        <div class="main">
+
+            <!-- CARROSSEL -->
+            <div class="carousel" id="carousel">
+                <div class="carousel-track" id="track"></div>
+                <button class="car-btn car-prev" onclick="carMove(-1)" aria-label="Anterior"><i class="fa-solid fa-chevron-left"></i></button>
+                <button class="car-btn car-next" onclick="carMove(1)"  aria-label="Próximo"><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+            <div class="car-dots" id="car-dots"></div>
+            <div class="thumbnails" id="thumbs"></div>
+
+            <!-- SOBRE O DESTINO -->
+            <div class="cblock" style="margin-top:32px;">
+                <div class="cblock-title"><i class="fa-solid fa-earth-americas" style="color:var(--accent);margin-right:8px"></i>Sobre o Destino</div>
+                <p class="pkg-desc" id="pkg-desc" data-eid="pkg-desc" data-elabel="Descrição do Destino">Carregando…</p>
+            </div>
+
+            <!-- INCLUSO / NÃO INCLUSO -->
+            <div class="cblock">
+                <div class="cblock-title"><i class="fa-solid fa-list-check" style="color:var(--accent);margin-right:8px"></i>O que está incluso</div>
+                <ul class="incluso-list" id="incluso-list"></ul>
+                <span class="nao-incluso-label">Não incluso:</span>
+                <ul class="nao-incluso-list" id="nao-incluso-list"></ul>
+            </div>
+
+            <!-- ROTEIRO -->
+            <div class="cblock">
+                <div class="cblock-title"><i class="fa-solid fa-map-location-dot" style="color:var(--accent);margin-right:8px"></i>Roteiro Sugerido</div>
+                <div id="roteiro-list"></div>
+            </div>
+
+        </div><!-- /main -->
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar">
+            <div class="price-card">
+                <p class="price-from">A partir de:</p>
+                <div class="price-num" id="price-num" data-eid="pkg-price" data-elabel="Preço">R$ —</div>
+                <p class="price-acc" id="price-parc" data-eid="pkg-parcelas" data-elabel="Parcelamento"></p>
+                <div class="price-meta">
+                    <div class="pm-row"><i class="fa-solid fa-location-dot"></i><span id="sb-loc" data-eid="pkg-sb-loc" data-elabel="Sidebar Localização">—</span></div>
+                    <div class="pm-row"><i class="fa-solid fa-moon"></i><span id="sb-dur" data-eid="pkg-sb-dur" data-elabel="Sidebar Duração">—</span></div>
+                    <div class="pm-row"><i class="fa-solid fa-credit-card"></i><span>Estratégia com Milhas</span></div>
+                    <div class="pm-row"><i class="fa-solid fa-headset"></i><span>Suporte da Aline</span></div>
+                </div>
+                <a href="#" id="btn-wa" class="btn btn-wa" style="font-size:15px;height:50px;margin-bottom:10px;">
+                    <i class="fab fa-whatsapp"></i> Reservar pelo WhatsApp
+                </a>
+                <a href="index.html#contato" class="btn btn-outline">
+                    <i class="fa-solid fa-envelope"></i> Solicitar Orçamento
+                </a>
+                <p class="price-note">*Valores por pessoa, sujeitos à disponibilidade.</p>
+            </div>
+        </aside>
+
+    </div><!-- /pkg-layout -->
+</div><!-- /container -->
+
+<!-- ════════════ OUTROS DESTINOS ════════════ -->
+<section class="outros">
+    <div class="container">
+        <div class="outros-hdr">
+            <div>
+                <span class="label">Explore mais</span>
+                <h2 class="h2" style="margin-bottom:0">Outros destinos incríveis</h2>
+            </div>
+            <a href="index.html#destinos" class="btn btn-navy" style="flex-shrink:0">Ver todos <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+        <div class="cards-row" id="outros-cards"></div>
+    </div>
+</section>
+
+<!-- ════════════ FOOTER ════════════ -->
+<footer>
+    <div class="container">
+        <div class="ft-top">
+            <div class="ft-brand">
+                <a href="index.html">
+                    <img src="logo.png" alt="Me Guia Viagens" style="height:44px;width:auto;object-fit:contain;filter:brightness(0) invert(1);">
+                </a>
+                <p>Especialistas em hotéis & resorts, milhas aéreas, visto americano e bloqueios de voos. Viaje mais e melhor!</p>
+                <div class="ft-social">
+                    <a href="https://www.instagram.com/meguiaviagens" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                    <a href="https://wa.me/554299732517" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            <div>
+                <h5>Destinos</h5>
+                <div class="ft-links">
+                    <a href="pacote.html?id=fortaleza">Fortaleza & Jericoacoara</a>
+                    <a href="pacote.html?id=orlando">Orlando & Disney</a>
+                    <a href="pacote.html?id=olimpia">Olímpia Resort</a>
+                    <a href="pacote.html?id=lasvegas">Las Vegas + LA</a>
+                    <a href="pacote.html?id=cancun">Cancún All Inclusive</a>
+                    <a href="pacote.html?id=portogalinhas">Porto de Galinhas</a>
+                </div>
+            </div>
+            <div>
+                <h5>Serviços</h5>
+                <div class="ft-links">
+                    <a href="index.html#servicos">Hotéis & Resorts</a>
+                    <a href="index.html#servicos">Milhas Aéreas</a>
+                    <a href="index.html#servicos">Visto Americano</a>
+                    <a href="index.html#servicos">Bloqueios Aéreos</a>
+                    <a href="index.html#depoimentos">Depoimentos</a>
+                </div>
+            </div>
+            <div>
+                <h5>Contato</h5>
+                <div class="ft-links">
+                    <a href="https://wa.me/554299732517"><i class="fab fa-whatsapp" style="color:var(--wa);margin-right:7px"></i>WhatsApp</a>
+                    <span><i class="fa-solid fa-globe" style="color:var(--accent);margin-right:7px"></i>meguiaviagens.com.br</span>
+                    <span><i class="fa-solid fa-clock" style="color:var(--accent);margin-right:7px"></i>Seg–Sex 8h–20h</span>
+                </div>
+            </div>
+        </div>
+        <div class="ft-bottom">
+            <span>© 2025 Me Guia Viagens · Todos os direitos reservados</span>
+            <span>Feito com <i class="fa-solid fa-heart" style="color:var(--accent)"></i> para quem ama viajar &nbsp;·&nbsp; <a href="/admin/login.html" style="color:rgba(255,255,255,0.2);font-size:.75rem;text-decoration:none;" title="Admin">⚙</a></span>
+        </div>
+    </div>
+</footer>
+
+<a href="https://wa.me/554299732517" class="wa" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+
+<!-- ════════════ SCRIPTS ════════════ -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+
+    const id  = new URLSearchParams(location.search).get('id') || 'fortaleza';
+    const pkg = DB[id] || DB.fortaleza;
+
+    document.title = pkg.title + ' — Me Guia Viagens';
+    document.getElementById('breadcrumb-title').textContent = pkg.title;
+    document.getElementById('pkg-title').textContent        = pkg.title;
+    document.getElementById('pkg-subtitle').textContent     = pkg.subtitle;
+    document.getElementById('meta-loc').textContent         = pkg.location;
+    document.getElementById('meta-dur').textContent         = pkg.duration;
+    document.getElementById('pkg-desc').textContent         = pkg.desc;
+    document.getElementById('sb-loc').textContent           = pkg.location;
+    document.getElementById('sb-dur').textContent           = pkg.duration;
+    document.getElementById('price-num').textContent        = 'R$ ' + pkg.price;
+    document.getElementById('price-parc').textContent       = 'ou ' + pkg.parcelas;
+
+    const staticEids = ['pkg-title','pkg-subtitle','pkg-loc','pkg-dur','pkg-desc',
+                        'pkg-price','pkg-parcelas','pkg-sb-loc','pkg-sb-dur'];
+    staticEids.forEach(eid => {
+        const el = document.querySelector(`[data-eid="${eid}"]`);
+        if (el) el.dataset.eid = id + '-' + eid;
+    });
+
+    const waMsg = encodeURIComponent(
+        `Olá, Me Guia Viagens! ✈️\n\nTenho interesse no pacote *${pkg.title}*\n\n` +
+        `📍 Destino: ${pkg.location}\n` +
+        `🌙 Período: ${pkg.duration}\n` +
+        `👥 Qtd de Pessoas: \n` +
+        `📅 Data Pretendida: \n\n` +
+        `Vim pelo site e aguardo o orçamento!`
+    );
+    document.getElementById('btn-wa').href = `https://wa.me/${SITE.whatsapp}?text=${waMsg}`;
+
+    // ── Carrossel ──
+    const track = document.getElementById('track');
+    const dotsEl = document.getElementById('car-dots');
+    const thumbsEl = document.getElementById('thumbs');
+    let cur = 0;
+
+    pkg.images.forEach((src, i) => {
+        const slide = document.createElement('div');
+        slide.className = 'carousel-slide';
+        const img = document.createElement('img');
+        img.src = src; img.alt = pkg.title + ' ' + (i+1);
+        img.loading = i === 0 ? 'eager' : 'lazy';
+        img.dataset.eid = id + '-pkg-img-' + i;
+        img.dataset.elabel = 'Foto ' + (i+1) + ' — ' + pkg.title;
+        slide.appendChild(img); track.appendChild(slide);
+
+        const dot = document.createElement('div');
+        dot.className = 'car-dot' + (i===0?' on':'');
+        dot.onclick = () => goTo(i);
+        dotsEl.appendChild(dot);
+
+        const th = document.createElement('div');
+        th.className = 'thumb' + (i===0?' on':'');
+        th.onclick = () => goTo(i);
+        const ti = document.createElement('img');
+        ti.src = src; ti.alt = ''; ti.loading = 'lazy';
+        ti.dataset.eid = id + '-pkg-img-' + i;
+        th.appendChild(ti); thumbsEl.appendChild(th);
+    });
+
+    function goTo(idx) {
+        cur = idx;
+        track.style.transform = `translateX(-${idx * 100}%)`;
+        document.querySelectorAll('.car-dot').forEach((d,i) => d.classList.toggle('on', i===idx));
+        document.querySelectorAll('.thumb').forEach((t,i) => t.classList.toggle('on', i===idx));
+    }
+
+    window.carMove = (dir) => goTo((cur + dir + pkg.images.length) % pkg.images.length);
+
+    let startX = 0;
+    track.addEventListener('touchstart', e => startX = e.touches[0].clientX, {passive:true});
+    track.addEventListener('touchend',   e => {
+        const diff = startX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 40) carMove(diff > 0 ? 1 : -1);
+    });
+
+    // ── Incluso / Não Incluso ──
+    const inclEl = document.getElementById('incluso-list');
+    pkg.incluso.forEach((item, i) => {
+        const li = document.createElement('li');
+        li.dataset.eid = `${id}-pkg-incluso-${i}`;
+        li.dataset.elabel = `Incluso ${i+1} — ${pkg.title}`;
+        li.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${item}`;
+        inclEl.appendChild(li);
+    });
+
+    if (pkg.nao_incluso) {
+        const nEl = document.getElementById('nao-incluso-list');
+        pkg.nao_incluso.forEach((item, i) => {
+            const li = document.createElement('li');
+            li.dataset.eid = `${id}-pkg-nao-incluso-${i}`;
+            li.dataset.elabel = `Não Incluso ${i+1} — ${pkg.title}`;
+            li.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> ${item}`;
+            nEl.appendChild(li);
+        });
+    }
+
+    // ── Roteiro ──
+    const rotEl = document.getElementById('roteiro-list');
+    pkg.roteiro.forEach((r, i) => {
+        const div = document.createElement('div');
+        div.className = 'roteiro-item';
+        const h4 = document.createElement('h4');
+        h4.dataset.eid = `${id}-pkg-rot-${i}-title`;
+        h4.dataset.elabel = `Dia ${i+1} Título — ${pkg.title}`;
+        h4.textContent = r.title;
+        const p = document.createElement('p');
+        p.dataset.eid = `${id}-pkg-rot-${i}-desc`;
+        p.dataset.elabel = `Dia ${i+1} Texto — ${pkg.title}`;
+        p.textContent = r.desc;
+        const dayDiv = document.createElement('div');
+        dayDiv.className = 'roteiro-day';
+        dayDiv.innerHTML = `<div class="roteiro-day-num">${r.dia.replace('º Dia','').replace('-','–')}</div><div class="roteiro-day-lbl">Dia</div>`;
+        const bodyDiv = document.createElement('div');
+        bodyDiv.className = 'roteiro-body';
+        bodyDiv.appendChild(h4);
+        bodyDiv.appendChild(p);
+        div.appendChild(dayDiv);
+        div.appendChild(bodyDiv);
+        rotEl.appendChild(div);
+    });
+
+    // ── Outros Destinos ──
+    const destImgs = {
+        fortaleza:     'https://images.unsplash.com/photo-1564419320461-6870880221ad?auto=format&fit=crop&w=600&q=70',
+        orlando:       'https://images.unsplash.com/photo-1568092816214-02404ef89f59?auto=format&fit=crop&w=600&q=70',
+        olimpia:       'https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=600&q=70',
+        lasvegas:      'https://images.unsplash.com/photo-1605833556294-ea5c7a74f57d?auto=format&fit=crop&w=600&q=70',
+        portogalinhas: 'https://images.unsplash.com/photo-1590523277543-a94d2e4eb00b?auto=format&fit=crop&w=600&q=70',
+        cancun:        'https://images.unsplash.com/photo-1552074284-5e88ef1aef18?auto=format&fit=crop&w=600&q=70'
+    };
+    const destEid = {
+        fortaleza: 'card1-img', orlando: 'card2-img', olimpia: 'card3-img',
+        lasvegas: 'card4-img', portogalinhas: 'card5-img', cancun: 'card6-img'
+    };
+    const outros = Object.keys(DB).filter(k => k !== id).slice(0, 4);
+    const cardsEl = document.getElementById('outros-cards');
+    outros.forEach(k => {
+        const p = DB[k];
+        const eid = destEid[k] || '';
+        const card = document.createElement('a');
+        card.href = `pacote.html?id=${k}`;
+        card.className = 'card-link';
+        card.innerHTML = `
+            <div class="card-img">
+                <img src="${destImgs[k]}" alt="${p.title}" loading="lazy"${eid ? ` data-eid="${eid}" data-elabel="Foto ${p.title}"` : ''}>
+                <div class="card-flag">${p.flag}</div>
+            </div>
+            <div class="card-body">
+                <div class="card-loc"><i class="fa-solid fa-location-dot"></i> ${p.location}</div>
+                <h3>${p.title}</h3>
+                <div class="card-foot">
+                    <div class="card-price">R$ ${p.price.split(',')[0]} <small>/ pessoa</small></div>
+                    <span class="card-arr">Ver <i class="fa-solid fa-arrow-right"></i></span>
+                </div>
+            </div>`;
+        cardsEl.appendChild(card);
+    });
+});
+
+// ── Mobile menu ──
+const burger = document.getElementById('burger');
+const panel  = document.getElementById('mobile-panel');
+burger.addEventListener('click', () => {
+    burger.classList.toggle('open');
+    panel.classList.toggle('open');
+});
+</script>
+<!-- ═══ EDITOR VISUAL ═══ -->
+<script src="editor.js"></script>
+</body>
+</html>
