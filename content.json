@@ -9,6 +9,63 @@
     "src": "https://www.viajenaviagem.com/wp-content/uploads/2024/02/letreiro-porto-de-galinhas-16x9-1.jpg.webp"
   },
   "dif-img": {
-    "src": "https://raw.githubusercontent.com/lucasferraripro/meguiaviagens-site/master/imagens/uploads/1776014003944_630966816_17937878316149001_2557465954487338199_n.jpg"
+    "src": "https://raw.githubusercontent.com/lucasferraripro/meguiaviagens-site/master/imagens/uploads/1776517237456_logo_me_guia.png"
+  },
+  "hero-title": {
+    "html": "Planejamos sua&nbsp;<em>viagem</em>&nbsp;com <em>estratégia, economia e suporte real</em>&nbsp;do início ao fim"
+  },
+  "dep-1-dest": {
+    "html": "Marília, SP — Viagem nacional (casal)"
+  },
+  "dep-3-dest": {
+    "html": "Castro, PR — Viagem para Orlando &amp; Califórnia"
+  },
+  "dep-4-dest": {
+    "html": "Marília, SP — Viagem em família"
+  },
+  "contato-sub": {
+    "html": "Receba uma proposta pensada para o seu perfil de viagem."
+  },
+  "home-stat1-l": {
+    "html": "<br>"
+  },
+  "home-stat3-l": {
+    "html": "Atendimento Pessoal<div>com suporte do início ao fim da viagem</div>"
+  },
+  "home-stat4-l": {
+    "html": "Avaliação dos Clientes<div><br></div>"
+  },
+  "home-stat1-n": {
+    "html": "Especialista em viagens com milhas e otimização de custos",
+    "style": {
+      "color": "#bababa"
+    }
+  },
+  "servicos-title": {
+    "html": "Soluções completas para quem quer viajar com mais estratégia e menos preocupação"
+  },
+  "serv1-desc": {
+    "html": "Selecionamos hospedagens com excelente custo-benefício, localização estratégica e condições ideais para o seu perfil de viagem."
+  },
+  "serv3-desc": {
+    "html": "Orientação em cada etapa do processo, do formulário ao agendamento, para você seguir com mais segurança e organização."
+  },
+  "serv4-desc": {
+    "html": "Buscamos opções promocionais e oportunidades de emissão que nem sempre chegam ao público no melhor timing."
+  },
+  "step2-title": {
+    "html": "2. Montamos sua proposta estratégica e exclusiva"
+  },
+  "step3-desc": {
+    "html": "Após a aprovação, cuidamos dos detalhes da operação e acompanhamos sua jornada com orientação prática."
+  },
+  "dif-item3-title": {
+    "html": "Suporte em viagens internacionais e visto americano"
+  },
+  "contato-title": {
+    "html": "Fale com a Me Guia agora"
+  },
+  "home-stat2-l": {
+    "html": "Destinos Atendidos<br>Nacionais, Internacionais, Hoteis &amp; Resorts"
   }
 }
