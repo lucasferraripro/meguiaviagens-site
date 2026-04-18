@@ -76,5 +76,13 @@
     "style": {
       "fontSize": "35px"
     }
-  }
+  },
+  "colors": {
+    "--primary": "#000000",
+    "--primary-dark": "#000000",
+    "--accent": "#e8b84b",
+    "--text-dark": "#000000",
+    "--wa": "#25d366"
+  },
+  "whatsapp": "5542991311225"
 }
