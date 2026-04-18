@@ -70,5 +70,11 @@
   },
   "home-stat2-l": {
     "html": "Destinos Atendidos<br>Nacionais, Internacionais, Hoteis &amp; Resorts"
+  },
+  "dest-title": {
+    "html": "Destinos incríveis esperando pela sua próxima aventura",
+    "style": {
+      "fontSize": "35px"
+    }
   }
 }
