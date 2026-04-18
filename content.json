@@ -12,7 +12,10 @@
     "src": "https://raw.githubusercontent.com/lucasferraripro/meguiaviagens-site/master/imagens/uploads/1776517237456_logo_me_guia.png"
   },
   "hero-title": {
-    "html": "Planejamos sua&nbsp;<em>viagem</em>&nbsp;com <em>estratégia, economia e suporte real</em>&nbsp;do início ao fim"
+    "html": "Planejamos sua&nbsp;<em>viagem</em>&nbsp;com <em>estratégia, economia e suporte real</em>&nbsp;do início ao fim",
+    "style": {
+      "fontSize": "50px"
+    }
   },
   "dep-1-dest": {
     "html": "Marília, SP — Viagem nacional (casal)"
