@@ -652,7 +652,24 @@
 
 <!-- ════════════ SCRIPTS ════════════ -->
 <script>
-document.addEventListener('DOMContentLoaded', () => {
+// ── Aguarda CMS antes de renderizar (suporte a pacotes adicionados pelo editor) ──
+async function initPacote() {
+    // Tenta carregar pacotes novos do CMS publicado
+    try {
+        const r = await fetch('/api/content?_=' + Date.now());
+        if (r.ok) {
+            const cms = await r.json();
+            if (cms && cms.__new_packages && typeof cms.__new_packages === 'object') {
+                Object.assign(DB, cms.__new_packages);
+            }
+        }
+    } catch (_) {}
+
+    // Também mescla rascunho local (para admin em modo editor)
+    try {
+        const draft = JSON.parse(localStorage.getItem('meguia_cms_v1') || '{}');
+        if (draft.__new_packages) Object.assign(DB, draft.__new_packages);
+    } catch (_) {}
 
     const id  = new URLSearchParams(location.search).get('id') || 'fortaleza';
     const pkg = DB[id] || DB.fortaleza;
@@ -814,14 +831,18 @@ document.addEventListener('DOMContentLoaded', () => {
             </div>`;
         cardsEl.appendChild(card);
     });
-});
+} // end initPacote
 
-// ── Mobile menu ──
-const burger = document.getElementById('burger');
-const panel  = document.getElementById('mobile-panel');
-burger.addEventListener('click', () => {
-    burger.classList.toggle('open');
-    panel.classList.toggle('open');
+document.addEventListener('DOMContentLoaded', () => {
+    initPacote();
+
+    // ── Mobile menu ──
+    const burger = document.getElementById('burger');
+    const panel  = document.getElementById('mobile-panel');
+    burger.addEventListener('click', () => {
+        burger.classList.toggle('open');
+        panel.classList.toggle('open');
+    });
 });
 </script>
 <!-- ═══ EDITOR VISUAL ═══ -->

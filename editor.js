@@ -1,33 +1,34 @@
 /**
- * LOVISA DESTINOS — EDITOR VISUAL v3
+ * ME GUIA VIAGENS — EDITOR VISUAL v4
  * Clique em qualquer elemento destacado para editar.
- * Sem necessidade de selecionar modo antes.
+ * Suporte a: adicionar pacotes, remover cards, editar textos/imagens/links/cores.
  */
 (function () {
     'use strict';
 
-    const CMS_KEY     = 'lovisa_cms_v3';
+    const CMS_KEY     = 'meguia_cms_v1';
     const AUTH_KEY    = 'lovisa_auth';
+    const SECRET_KEY  = 'lovisa_secret';
     const CONTENT_URL = '/api/content';
+    const isLocal     = location.protocol === 'file:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1';
 
     /* ─── AUTH ─────────────────────────────────────────────── */
-    const auth     = JSON.parse(sessionStorage.getItem(AUTH_KEY) || 'null');
+    const auth     = JSON.parse(sessionStorage.getItem(AUTH_KEY) || localStorage.getItem(AUTH_KEY) || 'null');
     const isAdmin  = auth && auth.expires > Date.now();
     const params   = new URLSearchParams(location.search);
     const editMode = isAdmin && (params.get('editor') === '1' || sessionStorage.getItem('editor_active') === '1');
 
     /* ─── APLICAR CONTEÚDO ──────────────────────────────────── */
     function applyContent(cms) {
-        if (!cms || !Object.keys(cms).length) return;
-        if (cms.colors) {
-            // Aliases: index.html/pacote.html usam --navy/--navy-dark/--text
+        if (!cms || typeof cms !== 'object' || !Object.keys(cms).length) return;
+
+        if (cms.colors && typeof cms.colors === 'object') {
             const aliases = { '--primary': '--navy', '--primary-dark': '--navy-dark', '--text-dark': '--text' };
             Object.entries(cms.colors).forEach(([k, v]) => {
                 document.documentElement.style.setProperty(k, v);
                 if (aliases[k]) document.documentElement.style.setProperty(aliases[k], v);
             });
         }
-        // Atualiza todos os links de WhatsApp se número foi editado
         if (cms.whatsapp) {
             document.querySelectorAll('a[href*="wa.me/"]').forEach(a => {
                 a.href = a.href.replace(/wa\.me\/\d+/, 'wa.me/' + cms.whatsapp);
@@ -36,15 +37,63 @@
         document.querySelectorAll('[data-eid]').forEach(el => {
             const d = cms[el.dataset.eid];
             if (!d) return;
-            if (d.html  != null) el.innerHTML = d.html;
-            if (d.src   != null && el.tagName === 'IMG') el.src = d.src;
-            if (d.href  != null) el.setAttribute('href', d.href);
-            if (d.target!= null) el.setAttribute('target', d.target);
-            if (d.style)         Object.assign(el.style, d.style);
+            if (d.html   != null) el.innerHTML = d.html;
+            if (d.text   != null) el.textContent = d.text;
+            if (d.src    != null && el.tagName === 'IMG') el.src = d.src;
+            if (d.href   != null) el.setAttribute('href', d.href);
+            if (d.target != null) el.setAttribute('target', d.target);
+            if (d.style && typeof d.style === 'object') Object.assign(el.style, d.style);
         });
+
+        // Mesclar pacotes novos no DB (pacote.html)
+        if (cms.__new_packages && typeof cms.__new_packages === 'object' && typeof DB !== 'undefined') {
+            Object.assign(DB, cms.__new_packages);
+        }
+
+        // Remover cards marcados para remoção
+        if (Array.isArray(cms.__removed_cards)) {
+            cms.__removed_cards.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.remove();
+            });
+        }
+
+        // Injetar cards de novos pacotes na home (index.html)
+        if (cms.__new_packages && typeof cms.__new_packages === 'object') {
+            const grid = document.querySelector('.cards-grid');
+            if (grid) {
+                const removed = Array.isArray(cms.__removed_cards) ? cms.__removed_cards : [];
+                Object.entries(cms.__new_packages).forEach(([pkgId, pkg]) => {
+                    const cardId = 'card-new-' + pkgId;
+                    if (removed.includes(cardId)) return;
+                    if (document.getElementById(cardId)) return;
+                    const a = document.createElement('a');
+                    a.className = 'card-link rv';
+                    a.id = cardId;
+                    a.href = 'pacote.html?id=' + pkgId;
+                    const img = pkg.images && pkg.images[0] ? pkg.images[0] : 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=800&q=80';
+                    a.innerHTML = `
+                        <div class="card-img">
+                            <img src="${img}" alt="${pkg.title}" loading="lazy">
+                            <div class="card-flag">${pkg.flag || '🌍'}</div>
+                            <div class="card-overlay"><span>Ver roteiro <i class="fa-solid fa-arrow-right"></i></span></div>
+                        </div>
+                        <div class="card-body">
+                            <div class="card-loc"><i class="fa-solid fa-location-dot"></i> ${pkg.location || ''}</div>
+                            <h3>${pkg.title}</h3>
+                            <div class="card-foot">
+                                <div class="card-price">R$ ${pkg.price || '—'}<small> / pessoa</small></div>
+                                <span class="card-arrow">Saiba mais <i class="fa-solid fa-arrow-right"></i></span>
+                            </div>
+                        </div>`;
+                    grid.appendChild(a);
+                });
+            }
+        }
     }
 
     async function fetchContent() {
+        if (location.protocol === 'file:') return {};
         try {
             const r = await fetch(CONTENT_URL + '?_=' + Date.now());
             return r.ok ? await r.json() : {};
@@ -52,10 +101,13 @@
     }
 
     async function loadAndApply(srv) {
-        let merged = srv || {};
+        let merged = (srv && typeof srv === 'object') ? { ...srv } : {};
+        if (srv && srv.__new_packages) window.__MEGUIA_SRV_CMS = srv;
         if (editMode) {
-            const draft = JSON.parse(localStorage.getItem(CMS_KEY) || '{}');
-            merged = { ...merged, ...draft };
+            try {
+                const draft = JSON.parse(localStorage.getItem(CMS_KEY) || '{}');
+                merged = { ...merged, ...draft };
+            } catch (_) {}
         }
         applyContent(merged);
         return merged;
@@ -159,29 +211,30 @@
 
         async start(srv) {
             injectCSS();
-            // Reutiliza conteúdo já carregado pelo loadAndApply (sem fetch extra)
-            const draft = JSON.parse(localStorage.getItem(CMS_KEY) || '{}');
+            let draft = {};
+            try { draft = JSON.parse(localStorage.getItem(CMS_KEY) || '{}'); } catch (_) {}
             this.cms = { ...(srv || {}), ...draft };
 
             document.body.classList.add('ld-on');
             sessionStorage.setItem('editor_active', '1');
             this.buildBar();
             this.bindAll();
-            // Se há rascunho não publicado, mostrar indicador
-            if (Object.keys(JSON.parse(localStorage.getItem(CMS_KEY) || '{}')).length > 0) {
-                this.markDirty();
-            }
+            this.injectRemoveButtons();
+            if (Object.keys(draft).length > 0) this.markDirty();
         },
 
         buildBar() {
+            if (document.getElementById('ld-bar')) return;
             const bar = document.createElement('div');
             bar.id = 'ld-bar';
-            const lastPub = localStorage.getItem('lovisa_last_pub') || '';
+            const lastPub = localStorage.getItem('meguia_last_pub') || '';
             bar.innerHTML = `
-            <div class="ld-brand"><span class="ld-dot"></span>Editor</div>
-            <span class="ld-hint-text">👆 Clique em qualquer elemento laranja para editar</span>
+            <div class="ld-brand"><span class="ld-dot"></span>Me Guia Editor</div>
+            <span class="ld-hint-text">👆 Clique em qualquer elemento para editar</span>
             <div class="ld-spacer"></div>
-            ${lastPub ? `<span class="ld-last-pub">Publicado: ${lastPub}</span><div class="ld-sep"></div>` : ''}
+            ${lastPub ? `<span class="ld-last-pub">Pub: ${lastPub}</span><div class="ld-sep"></div>` : ''}
+            <button class="ld-btn" id="ld-add-pkg">➕ <span class="ld-btn-label">Pacote</span></button>
+            <div class="ld-sep"></div>
             <button class="ld-btn orange" id="ld-colors">🎨 <span class="ld-btn-label">Cores</span></button>
             <div class="ld-sep"></div>
             <button class="ld-btn green" id="ld-pub">🚀 <span class="ld-btn-label">Publicar</span></button>
@@ -189,24 +242,27 @@
             <button class="ld-btn" id="ld-revert" title="Descartar rascunho não publicado">↩ <span class="ld-btn-label">Reverter</span></button>
             <button class="ld-btn red" id="ld-exit">✕ <span class="ld-btn-label">Sair</span></button>`;
             document.body.prepend(bar);
-            document.getElementById('ld-colors').onclick = () => this.pColors();
-            document.getElementById('ld-pub').onclick    = () => this.publish();
-            document.getElementById('ld-revert').onclick = () => this.revert();
-            document.getElementById('ld-exit').onclick   = () => this.exit();
+            document.getElementById('ld-add-pkg').onclick = () => this.pAddPacote();
+            document.getElementById('ld-colors').onclick  = () => this.pColors();
+            document.getElementById('ld-pub').onclick     = () => this.publish();
+            document.getElementById('ld-revert').onclick  = () => this.revert();
+            document.getElementById('ld-exit').onclick    = () => this.exit();
         },
 
         bindAll() {
-            document.querySelectorAll('[data-eid]').forEach(el => {
-                if (el._ldBound) return;
-                el._ldBound = true;
-                el.addEventListener('click', e => {
+            if (this._ldDelegated) return;
+            this._ldDelegated = true;
+            document.addEventListener('click', e => {
+                const el = e.target.closest('[data-eid]');
+                if (el && document.body.classList.contains('ld-on')) {
+                    if (e.target.closest('.ld-panel') || e.target.closest('#ld-bar')) return;
                     e.preventDefault();
                     e.stopPropagation();
                     document.querySelectorAll('.ld-sel').forEach(x => x.classList.remove('ld-sel'));
                     el.classList.add('ld-sel');
                     this.dispatch(el);
-                });
-            });
+                }
+            }, true);
         },
 
         dispatch(el) {
@@ -322,7 +378,7 @@
                     status.style.color = '#6B7280';
                     try {
                         const b64 = dataUrl.split(',')[1];
-                        const secret = sessionStorage.getItem('lovisa_secret') || '';
+                        const secret = sessionStorage.getItem(SECRET_KEY) || localStorage.getItem(SECRET_KEY) || '';
                         const res = await fetch('/api/upload', {
                             method: 'POST',
                             headers: { 'Content-Type': 'application/json' },
@@ -435,6 +491,171 @@
             };
         },
 
+        /* ── BOTÕES DE REMOÇÃO NOS CARDS DA HOME ── */
+        injectRemoveButtons() {
+            document.querySelectorAll('a.card-link[id], article.card-link[id]').forEach(card => {
+                if (!card.id) return;
+                if (card.querySelector('.ld-remove-btn')) return;
+                const btn = document.createElement('button');
+                btn.className = 'ld-remove-btn';
+                btn.title = 'Remover este pacote';
+                btn.innerHTML = '✕';
+                btn.style.cssText = 'position:absolute;top:10px;right:10px;z-index:99990;width:28px;height:28px;border-radius:50%;background:#DC2626;color:#fff;border:none;cursor:pointer;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.4);transition:all .15s;';
+                btn.onmouseenter = () => btn.style.transform = 'scale(1.15)';
+                btn.onmouseleave = () => btn.style.transform = '';
+                btn.onclick = (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    this.confirmRemoveCard(card);
+                };
+                card.style.position = 'relative';
+                card.appendChild(btn);
+            });
+        },
+
+        confirmRemoveCard(article) {
+            const title = article.querySelector('h3')?.textContent || article.id || 'este pacote';
+            const p = this.panel_('🗑️ Remover Pacote');
+            p.innerHTML += `<div class="ld-pb">
+                <div class="ld-pub-err" style="margin-bottom:14px;">
+                    ⚠️ Tem certeza que deseja <strong>remover</strong> o card <em>"${title}"</em> da página inicial?<br><br>
+                    <span style="font-size:11px;opacity:.8;">Pode ser desfeito clicando em "Reverter" antes de publicar.</span>
+                </div>
+                <div class="ld-acts">
+                    <button class="ld-ok" id="lda" style="background:#DC2626;">🗑️ Sim, remover</button>
+                    <button class="ld-ko" id="ldc">Cancelar</button>
+                </div>
+            </div>`;
+            p.querySelector('#ldc').onclick = () => this.closePanel();
+            p.querySelector('#lda').onclick = () => {
+                article.style.transition = 'all .3s';
+                article.style.opacity = '0';
+                article.style.transform = 'scale(.95)';
+                setTimeout(() => article.remove(), 320);
+
+                const removed = this.cms.__removed_cards || [];
+                if (!removed.includes(article.id)) removed.push(article.id);
+                this.store('__removed_cards', removed);
+
+                if (article.id.startsWith('card-new-')) {
+                    const pkgId = article.id.replace('card-new-', '');
+                    const newPkgs = this.cms.__new_packages || {};
+                    if (newPkgs[pkgId]) {
+                        delete newPkgs[pkgId];
+                        this.store('__new_packages', newPkgs);
+                    }
+                }
+
+                this.closePanel();
+                this.toast('✓ Card removido do rascunho', 'ok');
+            };
+        },
+
+        /* ── ADICIONAR NOVO PACOTE ── */
+        pAddPacote() {
+            const p = this.panel_('➕ Adicionar Novo Pacote');
+            p.innerHTML += `<div class="ld-pb">
+                <div class="ld-info">Preencha os dados. O pacote será adicionado à lista e ficará disponível via <code>pacote.html?id=SEU_ID</code>.</div>
+                <div class="ld-f"><label>ID do pacote (sem espaços)</label>
+                    <input type="text" id="lp-id" placeholder="ex: cancun, dubai, paris2026">
+                    <p class="ld-hint">Letras minúsculas, números e _ (underline). Ex: cancun, porto_galinhas</p>
+                </div>
+                <div class="ld-f"><label>Título</label><input type="text" id="lp-title" placeholder="Ex: Cancún All Inclusive"></div>
+                <div class="ld-f"><label>Subtítulo</label><input type="text" id="lp-sub" placeholder="Ex: Paraíso caribenho com tudo pago"></div>
+                <div class="ld-f"><label>Localização</label><input type="text" id="lp-loc" placeholder="Ex: Cancún, México"></div>
+                <div class="ld-f"><label>Duração</label><input type="text" id="lp-dur" placeholder="Ex: 7 dias / 6 noites"></div>
+                <div class="ld-f"><label>Preço (R$)</label><input type="text" id="lp-price" placeholder="Ex: 5.990,00"></div>
+                <div class="ld-f"><label>Parcelas</label><input type="text" id="lp-parc" placeholder="Ex: 10x de R$ 599"></div>
+                <div class="ld-f"><label>Flag / País</label><input type="text" id="lp-flag" placeholder="Ex: México 🇲🇽"></div>
+                <div class="ld-f"><label>Imagem 1 — Principal (URL)</label>
+                    <input type="url" id="lp-img" placeholder="https://images.unsplash.com/...">
+                </div>
+                <div class="ld-f"><label>Imagem 2 (URL) — opcional</label>
+                    <input type="url" id="lp-img2" placeholder="https://images.unsplash.com/...">
+                </div>
+                <div class="ld-f"><label>Imagem 3 (URL) — opcional</label>
+                    <input type="url" id="lp-img3" placeholder="https://images.unsplash.com/...">
+                    <p class="ld-hint">As 3 imagens aparecem no carrossel da página do pacote.</p>
+                </div>
+                <div class="ld-f"><label>Descrição do destino</label>
+                    <textarea id="lp-desc" rows="4" placeholder="Descreva o destino e os destaques do pacote…"></textarea>
+                </div>
+                <div class="ld-f"><label>O que está incluso</label>
+                    <textarea id="lp-incluso" rows="5" placeholder="Um item por linha. Ex:&#10;Passagem aérea ida e volta&#10;Hotel com café da manhã&#10;Transfer In/Out"></textarea>
+                    <p class="ld-hint">Um item por linha.</p>
+                </div>
+                <div class="ld-f"><label>Não incluso</label>
+                    <textarea id="lp-nao" rows="3" placeholder="Um item por linha. Ex:&#10;Almoços e jantares&#10;Gorjetas"></textarea>
+                </div>
+                <div class="ld-f"><label>Roteiro (um dia por linha)</label>
+                    <textarea id="lp-rot" rows="6" placeholder="Formato: Título do dia | Descrição&#10;Ex:&#10;Chegada a Cancún | Transfer ao resort. Check-in e tarde livre.&#10;Praia + Piscina | Dia de relaxamento no resort all inclusive."></textarea>
+                    <p class="ld-hint">Separe título e descrição com <strong>|</strong>. Um dia por linha.</p>
+                </div>
+                <div class="ld-acts" style="margin-top:16px;">
+                    <button class="ld-ok" id="lda">✓ Criar Pacote</button>
+                    <button class="ld-ko" id="ldc">Cancelar</button>
+                </div>
+            </div>`;
+
+            p.querySelector('#ldc').onclick = () => this.closePanel();
+            p.querySelector('#lda').onclick = () => {
+                const id    = p.querySelector('#lp-id').value.trim().replace(/[^a-z0-9_]/gi,'_').toLowerCase();
+                const title = p.querySelector('#lp-title').value.trim();
+                const img1  = p.querySelector('#lp-img').value.trim();
+                const img2  = p.querySelector('#lp-img2').value.trim();
+                const img3  = p.querySelector('#lp-img3').value.trim();
+
+                if (!id)    { p.querySelector('#lp-id').focus();    p.querySelector('#lp-id').style.borderColor='#DC2626';    return; }
+                if (!title) { p.querySelector('#lp-title').focus(); p.querySelector('#lp-title').style.borderColor='#DC2626'; return; }
+
+                const incluso  = p.querySelector('#lp-incluso').value.split('\n').map(s=>s.trim()).filter(Boolean);
+                const nao      = p.querySelector('#lp-nao').value.split('\n').map(s=>s.trim()).filter(Boolean);
+                const rotLines = p.querySelector('#lp-rot').value.split('\n').map(s=>s.trim()).filter(Boolean);
+                const roteiro  = rotLines.map((line, i) => {
+                    const [t, d] = line.split('|').map(s=>s.trim());
+                    return { dia: (i+1) + 'º Dia', title: t || ('Dia ' + (i+1)), desc: d || '' };
+                });
+
+                const images = [img1, img2, img3].filter(Boolean);
+                if (!images.length) images.push('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=1200&q=80');
+
+                const novoPacote = {
+                    title,
+                    subtitle:    p.querySelector('#lp-sub').value.trim(),
+                    location:    p.querySelector('#lp-loc').value.trim(),
+                    duration:    p.querySelector('#lp-dur').value.trim(),
+                    price:       p.querySelector('#lp-price').value.trim(),
+                    parcelas:    p.querySelector('#lp-parc').value.trim(),
+                    flag:        p.querySelector('#lp-flag').value.trim(),
+                    images,
+                    desc:        p.querySelector('#lp-desc').value.trim(),
+                    incluso,
+                    nao_incluso: nao,
+                    roteiro
+                };
+
+                const existing = this.cms.__new_packages || {};
+                existing[id] = novoPacote;
+                this.store('__new_packages', existing);
+
+                // Injetar card imediatamente na home
+                applyContent({ __new_packages: { [id]: novoPacote } });
+                // Adicionar botão de remoção no novo card
+                setTimeout(() => this.injectRemoveButtons(), 100);
+
+                this.closePanel();
+                this.toast('✓ Pacote "' + title + '" criado! Acesse: pacote.html?id=' + id, 'ok');
+
+                setTimeout(() => {
+                    const info = document.createElement('div');
+                    info.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#0F2460;color:#fff;padding:14px 22px;border-radius:12px;font-size:13px;z-index:999999;box-shadow:0 8px 24px rgba(0,0,0,.4);text-align:center;border:1px solid rgba(255,255,255,.15);';
+                    info.innerHTML = `📦 Pacote criado!<br><a href="pacote.html?id=${id}" style="color:#E8B84B;font-weight:700;" target="_blank">→ Abrir pacote.html?id=${id}</a><br><span style="font-size:11px;opacity:.6;margin-top:4px;display:block;">Publique para tornar permanente.</span>`;
+                    document.body.appendChild(info);
+                    setTimeout(() => info.remove(), 7000);
+                }, 400);
+            };
+        },
+
         /* ── CORES GLOBAIS ── */
         pColors() {
             const root = document.documentElement;
@@ -442,24 +663,24 @@
             const p = this.panel_('🎨 Cores Globais do Site');
             p.innerHTML += `<div class="ld-pb">
                 <div class="ld-info">Altera as cores em todo o site de uma vez.</div>
-                <div class="ld-cr"><label>🔵 Azul principal</label><input type="color" id="ldg1" value="${this.hex(g('--primary'))||'#1565C0'}"></div>
-                <div class="ld-cr"><label>🔵 Azul escuro</label><input type="color" id="ldg2" value="${this.hex(g('--primary-dark'))||'#0D47A1'}"></div>
-                <div class="ld-cr"><label>🟠 Laranja destaque</label><input type="color" id="ldg3" value="${this.hex(g('--accent'))||'#F97316'}"></div>
-                <div class="ld-cr"><label>⬛ Texto principal</label><input type="color" id="ldg4" value="${this.hex(g('--text-dark'))||'#1A1F2E'}"></div>
+                <div class="ld-cr"><label>🔵 Azul principal (navy)</label><input type="color" id="ldg1" value="${this.hex(g('--navy'))||'#1B3A8C'}"></div>
+                <div class="ld-cr"><label>🔵 Azul escuro</label><input type="color" id="ldg2" value="${this.hex(g('--navy-dark'))||'#0F2460'}"></div>
+                <div class="ld-cr"><label>🟡 Dourado destaque</label><input type="color" id="ldg3" value="${this.hex(g('--accent'))||'#E8B84B'}"></div>
+                <div class="ld-cr"><label>⬛ Texto principal</label><input type="color" id="ldg4" value="${this.hex(g('--text'))||'#1A1F2E'}"></div>
                 <div class="ld-cr"><label>🟩 WhatsApp verde</label><input type="color" id="ldg5" value="${this.hex(g('--wa'))||'#25D366'}"></div>
                 <hr class="ld-hr">
                 <div class="ld-f"><label>📱 Número do WhatsApp</label>
-                    <input type="text" id="ldgwa" value="${this.cms.whatsapp||''}" placeholder="5511999999999">
-                    <p class="ld-hint">Somente números com código do país (ex: 5511999999999). Atualiza todos os botões do site.</p>
+                    <input type="text" id="ldgwa" value="${this.cms.whatsapp||''}" placeholder="554299732517">
+                    <p class="ld-hint">Somente números com código do país. Atualiza todos os botões do site.</p>
                 </div>
                 <div class="ld-acts">
                     <button class="ld-ok" id="lda">✓ Aplicar cores</button>
                     <button class="ld-ko" id="ldc">Cancelar</button>
                 </div>
             </div>`;
-            const vars = ['--primary','--primary-dark','--accent','--text-dark','--wa'];
+            const vars   = ['--navy','--navy-dark','--accent','--text','--wa'];
             const inputs = ['ldg1','ldg2','ldg3','ldg4','ldg5'].map(id => p.querySelector('#'+id));
-            const waInp = p.querySelector('#ldgwa');
+            const waInp  = p.querySelector('#ldgwa');
             inputs.forEach((inp, i) => {
                 inp.oninput = () => root.style.setProperty(vars[i], inp.value);
             });
@@ -481,8 +702,7 @@
                 this.toast('✓ Cores salvas no rascunho', 'ok');
             };
             p.querySelector('#ldc').onclick = () => {
-                // Remove também aliases usados em index.html / pacote.html
-                [...vars, '--navy', '--navy-dark', '--text'].forEach(v => root.style.removeProperty(v));
+                vars.forEach(v => root.style.removeProperty(v));
                 applyContent(this.cms);
                 this.closePanel();
             };
@@ -517,7 +737,7 @@
             if (hasCols) items += `<li>Cores globais do site</li>`;
             if (hasWA)   items += `<li>Número do WhatsApp: ${this.cms.whatsapp}</li>`;
 
-            const hasSavedSecret = !!sessionStorage.getItem('lovisa_secret');
+            const hasSavedSecret = !!sessionStorage.getItem(SECRET_KEY);
             const p = this.panel_('🚀 Publicar no Site');
             p.innerHTML += `<div class="ld-pb">
                 <div class="ld-info" style="background:#EFF6FF;border:1px solid #BFDBFE;color:#1E40AF;border-radius:10px;padding:14px;margin-bottom:14px;line-height:1.8;">
@@ -536,11 +756,12 @@
             p.querySelector('#ldc').onclick = () => this.closePanel();
             p.querySelector('#lda').onclick = async () => {
                 const pwdEl = p.querySelector('#ldpwd');
-                let secret = sessionStorage.getItem('lovisa_secret') || '';
+                let secret = sessionStorage.getItem(SECRET_KEY) || localStorage.getItem(SECRET_KEY) || '';
                 if (pwdEl) {
                     if (!pwdEl.value) { pwdEl.focus(); pwdEl.style.borderColor='#DC2626'; return; }
                     secret = pwdEl.value;
-                    sessionStorage.setItem('lovisa_secret', secret);
+                    sessionStorage.setItem(SECRET_KEY, secret);
+                    localStorage.setItem(SECRET_KEY, secret);
                 }
                 p.querySelector('.ld-pb').innerHTML = `<div class="ld-loading"><span class="ld-spin">⏳</span>Publicando alterações…</div>`;
                 try {
@@ -553,16 +774,10 @@
                     if (res.ok && data.success) {
                         localStorage.removeItem(CMS_KEY);
                         const now = new Date().toLocaleString('pt-BR', {day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
-                        localStorage.setItem('lovisa_last_pub', now);
+                        localStorage.setItem('meguia_last_pub', now);
                         document.querySelectorAll('.ld-dirty-dot').forEach(d => d.remove());
                         const lp = document.querySelector('.ld-last-pub');
-                        if (lp) { lp.textContent = 'Publicado: ' + now; }
-                        else {
-                            const sep = document.createElement('div'); sep.className = 'ld-sep';
-                            const span = document.createElement('span'); span.className = 'ld-last-pub'; span.textContent = 'Publicado: ' + now;
-                            const btn2 = document.getElementById('ld-colors');
-                            if (btn2) { btn2.before(span); btn2.before(sep); }
-                        }
+                        if (lp) lp.textContent = 'Pub: ' + now;
                         applyContent(this.cms);
                         p.querySelector('.ld-pb').innerHTML = `
                             <div class="ld-pub-box">✅ <strong>Publicado com sucesso!</strong><br>
@@ -583,9 +798,13 @@
 
         /* ── SAIR ── */
         exit() {
-            const hasDraft = Object.keys(JSON.parse(localStorage.getItem(CMS_KEY) || '{}')).length > 0;
+            let hasDraft = false;
+            try { hasDraft = Object.keys(JSON.parse(localStorage.getItem(CMS_KEY) || '{}')).length > 0; } catch (_) {}
             if (hasDraft && !confirm('Sair do editor? Você tem alterações não publicadas (rascunho salvo).')) return;
             sessionStorage.removeItem('editor_active');
+            sessionStorage.removeItem(AUTH_KEY);
+            localStorage.removeItem(AUTH_KEY);
+            localStorage.removeItem(SECRET_KEY);
             const u = new URL(location.href);
             u.searchParams.delete('editor');
             location.replace(u.toString());

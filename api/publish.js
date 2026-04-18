@@ -30,20 +30,20 @@ export default async function handler(req, res) {
     const { content, secret } = body;
 
     // Verifica senha admin
-    const adminSecret = process.env.ADMIN_SECRET || 'Lovisa@2025';
+    const adminSecret = process.env.ADMIN_SECRET || 'MeGuia@2025';
     if (secret !== adminSecret) {
         return res.status(401).json({ error: 'Não autorizado' });
     }
 
     const token = process.env.GITHUB_TOKEN;
-    const owner = 'lucasferraripro';
-    const repo  = 'meguiaviagens-site';
+    const owner = process.env.GITHUB_OWNER || 'lucasferraripro';
+    const repo  = process.env.GITHUB_REPO  || 'meguiaviagens-site';
     const path  = 'content.json';
     const apiBase = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
     const headers = {
         'Authorization': `token ${token}`,
         'Accept': 'application/vnd.github.v3+json',
-        'User-Agent': 'lovisa-editor/1.0'
+        'User-Agent': 'meguia-editor/1.0'
     };
 
     try {

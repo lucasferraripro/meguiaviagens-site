@@ -7,8 +7,8 @@ export default async function handler(req, res) {
     res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate');
 
     const token = process.env.GITHUB_TOKEN;
-    const owner = 'lucasferraripro';
-    const repo  = 'meguiaviagens-site';
+    const owner = process.env.GITHUB_OWNER || 'lucasferraripro';
+    const repo  = process.env.GITHUB_REPO  || 'meguiaviagens-site';
     const path  = 'content.json';
 
     try {
@@ -18,7 +18,7 @@ export default async function handler(req, res) {
                 headers: {
                     'Authorization': `token ${token}`,
                     'Accept': 'application/vnd.github.v3+json',
-                    'User-Agent': 'lovisa-editor/1.0'
+                    'User-Agent': 'meguia-editor/1.0'
                 }
             }
         );

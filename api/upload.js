@@ -8,9 +8,9 @@ export default async function handler(req, res) {
     if (req.method !== 'POST') return res.status(405).end();
 
     const token  = process.env.GITHUB_TOKEN;
-    const owner  = 'lucasferraripro';
-    const repo   = 'meguiaviagens-site';
-    const adminSecret = process.env.ADMIN_SECRET || 'Lovisa@2025';
+    const owner  = process.env.GITHUB_OWNER || 'lucasferraripro';
+    const repo   = process.env.GITHUB_REPO  || 'meguiaviagens-site';
+    const adminSecret = process.env.ADMIN_SECRET || 'MeGuia@2025';
 
     let body = '';
     try {
@@ -41,7 +41,7 @@ export default async function handler(req, res) {
                 headers: {
                     'Authorization': `token ${token}`,
                     'Accept': 'application/vnd.github.v3+json',
-                    'User-Agent': 'lovisa-editor/1.0',
+                    'User-Agent': 'meguia-editor/1.0',
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({

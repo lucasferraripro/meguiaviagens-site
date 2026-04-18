@@ -137,12 +137,15 @@
             const data = await res.json();
 
             if (data.ok) {
-                sessionStorage.setItem('lovisa_auth', JSON.stringify({
+                const authData = JSON.stringify({
                     email,
                     ts: Date.now(),
                     expires: Date.now() + (8 * 60 * 60 * 1000)
-                }));
+                });
+                sessionStorage.setItem('lovisa_auth', authData);
                 sessionStorage.setItem('lovisa_secret', senha);
+                localStorage.setItem('lovisa_auth', authData);
+                localStorage.setItem('lovisa_secret', senha);
                 window.location.href = '../index.html?editor=1';
             } else {
                 errEl.style.display = 'block';
@@ -157,7 +160,7 @@
         }
     });
 
-    const auth = JSON.parse(sessionStorage.getItem('lovisa_auth') || 'null');
+    const auth = JSON.parse(sessionStorage.getItem('lovisa_auth') || localStorage.getItem('lovisa_auth') || 'null');
     if (auth && auth.expires > Date.now()) {
         window.location.href = '../index.html?editor=1';
     }
