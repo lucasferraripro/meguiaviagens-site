@@ -78,8 +78,8 @@
     }
   },
   "colors": {
-    "--primary": "#474da9",
-    "--primary-dark": "#b1b6fb",
+    "--primary": "#4650d2",
+    "--primary-dark": "#01086a",
     "--accent": "#fbd16f",
     "--text-dark": "#000000",
     "--wa": "#25d366"
