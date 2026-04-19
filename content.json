@@ -41,7 +41,7 @@
   "home-stat1-n": {
     "html": "Especialista em viagens com milhas e otimização de custos",
     "style": {
-      "color": "#bababa"
+      "fontSize": "30px"
     }
   },
   "servicos-title": {
@@ -66,7 +66,7 @@
     "html": "Suporte em viagens internacionais e visto americano"
   },
   "contato-title": {
-    "html": "Fale com a Me Guia agora"
+    "html": "Fale com um dos nossos consultores"
   },
   "home-stat2-l": {
     "html": "Destinos Atendidos<br>Nacionais, Internacionais, Hoteis &amp; Resorts"
