@@ -834,6 +834,11 @@
                         const lp = document.querySelector('.ld-last-pub');
                         if (lp) lp.textContent = 'Pub: ' + now;
                         applyContent(this.cms);
+                        // Re-renderiza cards da home com as imagens publicadas
+                        if (typeof renderCards === 'function') {
+                            window.__SRV_CMS = this.cms;
+                            renderCards();
+                        }
                         p.querySelector('.ld-pb').innerHTML = `
                             <div class="ld-pub-box">✅ <strong>Publicado com sucesso!</strong><br>
                             Visitantes verão as mudanças em alguns segundos.</div>

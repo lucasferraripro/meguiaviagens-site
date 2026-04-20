@@ -1109,12 +1109,33 @@ async function renderCards() {
     // Expõe para database.js e editor.js
     window.__SRV_CMS = srvCms;
 
-    // Aplica __db_overrides do servidor ao DB
+    // Aplica __db_overrides do servidor ao DB (textos + imagens)
     if (srvCms.__db_overrides) {
         Object.entries(srvCms.__db_overrides).forEach(([pkgId, ov]) => {
-            if (DB[pkgId]) Object.assign(DB[pkgId], ov);
+            if (!DB[pkgId]) return;
+            Object.entries(ov).forEach(([field, val]) => {
+                if (field === 'images' && Array.isArray(val)) {
+                    // Atualiza cada slot de imagem individualmente
+                    val.forEach((src, i) => { if (src) DB[pkgId].images[i] = src; });
+                    // Atualiza THUMB com images[0] se alterado
+                    if (val[0]) THUMB[pkgId] = val[0];
+                } else {
+                    DB[pkgId][field] = val;
+                }
+            });
         });
     }
+
+    // Aplica img-{pkgId} do servidor diretamente ao THUMB (chave legada da home)
+    Object.keys(srvCms).forEach(key => {
+        const m = key.match(/^img-([a-z0-9_]+)$/);
+        if (m && srvCms[key].src) {
+            const pkgId = m[1];
+            THUMB[pkgId] = srvCms[key].src;
+            if (DB[pkgId] && DB[pkgId].images) DB[pkgId].images[0] = srvCms[key].src;
+        }
+    });
+
     if (srvCms.__new_packages) {
         Object.entries(srvCms.__new_packages).forEach(([id, pkg]) => {
             if (!pkg.category) pkg.category = 'nacional';
@@ -1126,22 +1147,49 @@ async function renderCards() {
     if (!grid) return;
     grid.innerHTML = '';
 
-    const cms = JSON.parse(localStorage.getItem('meguia_cms_v1') || '{}');
+    // CMS local (rascunho do admin) — aplica sobre o srvCms
+    const localCms = JSON.parse(localStorage.getItem('meguia_cms_v1') || '{}');
+    // Merge: servidor + local (local tem prioridade)
+    const cms = Object.assign({}, srvCms, localCms);
+
+    // Aplica img-{pkgId} do CMS local ao THUMB também
+    Object.keys(localCms).forEach(key => {
+        const m = key.match(/^img-([a-z0-9_]+)$/);
+        if (m && localCms[key].src) {
+            THUMB[m[1]] = localCms[key].src;
+            if (DB[m[1]] && DB[m[1]].images) DB[m[1]].images[0] = localCms[key].src;
+        }
+    });
+    // Aplica __db_overrides do CMS local ao DB
+    if (localCms.__db_overrides) {
+        Object.entries(localCms.__db_overrides).forEach(([pkgId, ov]) => {
+            if (!DB[pkgId]) return;
+            Object.entries(ov).forEach(([field, val]) => {
+                if (field === 'images' && Array.isArray(val)) {
+                    val.forEach((src, i) => { if (src) DB[pkgId].images[i] = src; });
+                    if (val[0]) THUMB[pkgId] = val[0];
+                } else {
+                    DB[pkgId][field] = val;
+                }
+            });
+        });
+    }
+
     const removed = Array.isArray(cms.__removed_cards) ? cms.__removed_cards : [];
 
     Object.entries(DB).forEach(([id, p]) => {
         if (removed.includes('card-' + id)) return;
 
+        // buildCard já usa THUMB atualizado
         const card = buildCard(id, p);
         grid.appendChild(card);
 
-        // Aplica overrides do CMS local (edições do admin)
-        ['pix','parcel','dest','titulo','badge','data','incluso','img'].forEach(field => {
+        // Aplica overrides de texto do CMS nos elementos do card
+        ['pix','parcel','dest','titulo','badge','data','incluso'].forEach(field => {
             const eid = field + '-' + id;
             const el = card.querySelector(`[data-eid="${eid}"]`);
             if (!el || !cms[eid]) return;
-            if (field === 'img' && cms[eid].src) el.src = cms[eid].src;
-            else if (cms[eid].html !== undefined) el.innerHTML = cms[eid].html;
+            if (cms[eid].html !== undefined) el.innerHTML = cms[eid].html;
             if (cms[eid].style) Object.assign(el.style, cms[eid].style);
         });
     });
