@@ -186,6 +186,15 @@
         .hero-p { font-size: 1.1rem; color: rgba(255,255,255,.8); line-height: 1.7; margin-bottom: 36px; max-width: 500px; }
         .hero-btns { display: flex; flex-wrap: wrap; gap: 12px; }
 
+        .hero-trust {
+            display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px;
+            margin-top: 22px;
+            color: rgba(255,255,255,.55);
+            font-size: 12px; font-weight: 500; letter-spacing: .03em;
+        }
+        .hero-trust i { color: var(--accent); margin-right: 5px; }
+        .hero-trust-sep { color: rgba(255,255,255,.25); font-size: 14px; }
+
         .hero-scroll {
             position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%);
             display: flex; flex-direction: column; align-items: center; gap: 6px;
@@ -529,7 +538,7 @@
         <div class="hdr-inner">
             <a href="#home" class="logo">
                 <div style="height:52px;display:flex;align-items:center;">
-                    <img src="logo.png" alt="Me Guia Viagens" style="height:48px;width:auto;max-width:180px;object-fit:contain;filter:brightness(0) invert(1);" id="logo-img">
+                    <img src="imagens/uploads/1776517237456_logo_me_guia.png" alt="Me Guia Viagens" style="height:52px;width:auto;max-width:200px;object-fit:contain;" id="logo-img">
                 </div>
             </a>
             <nav class="hdr-nav">
@@ -574,7 +583,16 @@
             <p class="hero-p" data-eid="hero-sub" data-elabel="Subtítulo Hero">Hotéis & Resorts nacionais e internacionais, estratégias com milhas aéreas, auxílio no visto americano e os melhores bloqueios de voos. Realize seus sonhos com quem realmente entende de viagem.</p>
             <div class="hero-btns">
                 <a href="#contato" class="btn btn-accent">Solicitar Orçamento <i class="fa-solid fa-arrow-right"></i></a>
-                <a href="#destinos" class="btn btn-ghost">Ver Destinos</a>
+                <a href="https://wa.me/5542991311225" class="btn btn-ghost" target="_blank" rel="noopener" data-eid="hero-btn-wa" data-elabel="Botão WhatsApp Hero">
+                    <i class="fab fa-whatsapp"></i> Fale Conosco
+                </a>
+            </div>
+            <div class="hero-trust">
+                <span><i class="fa-solid fa-headset"></i> Atendimento consultivo</span>
+                <span class="hero-trust-sep">·</span>
+                <span><i class="fa-solid fa-globe"></i> Especialista em viagens internacionais</span>
+                <span class="hero-trust-sep">·</span>
+                <span><i class="fa-solid fa-shield-halved"></i> Suporte completo</span>
             </div>
         </div>
     </div>
@@ -844,7 +862,7 @@
         <div class="ft-top">
             <div class="ft-brand">
                 <a href="#home" class="logo">
-                    <img src="logo.png" alt="Me Guia Viagens" style="height:44px;width:auto;object-fit:contain;filter:brightness(0) invert(1);">
+                    <img src="imagens/uploads/1776517237456_logo_me_guia.png" alt="Me Guia Viagens" style="height:52px;width:auto;max-width:200px;object-fit:contain;">
                 </a>
                 <p>Especialistas em promoções de hotéis e resorts, milhas aéreas, visto americano e bloqueios de voos para você viajar mais e melhor.</p>
                 <div class="ft-social">
@@ -898,13 +916,13 @@
 <a href="https://wa.me/554299732517" class="wa" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
 
 <script>
-    // ── Logo filter (transparente no topo, colorida no solid) ──
+    // ── Logo blend mode (fundo preto some sobre fundo branco com multiply) ──
     const hdr = document.getElementById('header');
     const logoImg = document.getElementById('logo-img');
     window.addEventListener('scroll', () => {
         const solid = scrollY > 48;
         hdr.classList.toggle('solid', solid);
-        if (logoImg) logoImg.style.filter = solid ? 'none' : 'brightness(0) invert(1)';
+        if (logoImg) logoImg.style.mixBlendMode = solid ? 'multiply' : 'normal';
     }, {passive:true});
 
     // ── Mobile menu ──
