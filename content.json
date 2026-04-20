@@ -9,7 +9,10 @@
     "src": "https://www.viajenaviagem.com/wp-content/uploads/2024/02/letreiro-porto-de-galinhas-16x9-1.jpg.webp"
   },
   "dif-img": {
-    "src": "https://raw.githubusercontent.com/lucasferraripro/meguiaviagens-site/master/imagens/uploads/1776517237456_logo_me_guia.png"
+    "src": "https://raw.githubusercontent.com/lucasferraripro/meguiaviagens-site/master/imagens/uploads/1776517237456_logo_me_guia.png",
+    "style": {
+      "objectFit": "contain"
+    }
   },
   "hero-title": {
     "html": "Planejamos sua&nbsp;<em>viagem</em>&nbsp;com <em>estratégia, economia e suporte real</em>&nbsp;do início ao fim",
@@ -84,5 +87,8 @@
     "--text-dark": "#000000",
     "--wa": "#25d366"
   },
-  "whatsapp": "5542991311225"
+  "whatsapp": "5542991311225",
+  "fortaleza-pkg-img-2": {
+    "src": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1200&q=80"
+  }
 }
