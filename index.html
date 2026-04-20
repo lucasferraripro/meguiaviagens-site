@@ -29,7 +29,7 @@
             --white:      #FFFFFF;
             --border:     #E5E9F2;
             --wa:         #25D366;
-            --hh:         80px;
+            --hh:         88px;
             --r:          18px;
             --rl:         28px;
         }
@@ -537,8 +537,8 @@
     <div class="container">
         <div class="hdr-inner">
             <a href="#home" class="logo">
-                <div style="height:68px;display:flex;align-items:center;">
-                    <img src="imagens/uploads/1776517237456_logo_me_guia.png" alt="Me Guia Viagens" style="height:68px;width:auto;max-width:260px;object-fit:contain;" id="logo-img">
+                <div style="height:72px;display:flex;align-items:center;">
+                    <img src="logo.png" alt="Me Guia Viagens" style="height:72px;width:auto;max-width:280px;object-fit:contain;" id="logo-img">
                 </div>
             </a>
             <nav class="hdr-nav">
@@ -862,7 +862,7 @@
         <div class="ft-top">
             <div class="ft-brand">
                 <a href="#home" class="logo">
-                    <img src="imagens/uploads/1776517237456_logo_me_guia.png" alt="Me Guia Viagens" style="height:80px;width:auto;max-width:280px;object-fit:contain;">
+                    <img src="logo.png" alt="Me Guia Viagens" style="height:84px;width:auto;max-width:300px;object-fit:contain;">
                 </a>
                 <p>Especialistas em promoções de hotéis e resorts, milhas aéreas, visto americano e bloqueios de voos para você viajar mais e melhor.</p>
                 <div class="ft-social">
@@ -916,13 +916,12 @@
 <a href="https://wa.me/554299732517" class="wa" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
 
 <script>
-    // ── Logo blend mode (fundo preto some sobre fundo branco com multiply) ──
+    // ── Logo scroll — sem filtro, logo.png é colorida ──
     const hdr = document.getElementById('header');
     const logoImg = document.getElementById('logo-img');
     window.addEventListener('scroll', () => {
         const solid = scrollY > 48;
         hdr.classList.toggle('solid', solid);
-        if (logoImg) logoImg.style.mixBlendMode = solid ? 'multiply' : 'normal';
     }, {passive:true});
 
     // ── Mobile menu ──
