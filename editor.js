@@ -320,11 +320,30 @@
         /* ── IMAGEM ── */
         pImage(el) {
             const origSrc = el.src;
-            // Usa o atributo src original (não o absoluto do browser) se disponível
             const origAttr = el.getAttribute('src') || el.src;
+            const origFit = el.style.objectFit || getComputedStyle(el).objectFit || 'cover';
+            const origPos = el.style.objectPosition || 'center';
+
             const p = this.panel_('🖼️ Trocar Imagem — ' + (el.dataset.elabel || ''));
             p.innerHTML += `<div class="ld-pb">
-                <img class="ld-prev" id="ldprev" src="${origSrc}" style="background:#F3F4F6;">
+                <div style="position:relative;width:100%;height:120px;border-radius:9px;overflow:hidden;background:#F3F4F6;margin-bottom:10px;">
+                    <img id="ldprev" src="${origSrc}" style="width:100%;height:100%;object-fit:${origFit};object-position:${origPos};display:block;">
+                </div>
+                <div class="ld-f">
+                    <label>Ajuste da imagem</label>
+                    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:4px;">
+                        <button id="fit-cover"    style="padding:8px 4px;border:2px solid ${origFit==='cover'?'#1565C0':'#E5E7EB'};border-radius:8px;background:${origFit==='cover'?'#EFF6FF':'#fff'};cursor:pointer;font-size:11px;font-weight:700;color:#374151;transition:all .15s;">
+                            ⬛ Preencher
+                        </button>
+                        <button id="fit-contain"  style="padding:8px 4px;border:2px solid ${origFit==='contain'?'#1565C0':'#E5E7EB'};border-radius:8px;background:${origFit==='contain'?'#EFF6FF':'#fff'};cursor:pointer;font-size:11px;font-weight:700;color:#374151;transition:all .15s;">
+                            🔲 Centralizar
+                        </button>
+                        <button id="fit-initial"  style="padding:8px 4px;border:2px solid ${origFit==='initial'||origFit==='auto'?'#1565C0':'#E5E7EB'};border-radius:8px;background:${origFit==='initial'||origFit==='auto'?'#EFF6FF':'#fff'};cursor:pointer;font-size:11px;font-weight:700;color:#374151;transition:all .15s;">
+                            📐 Original
+                        </button>
+                    </div>
+                    <p class="ld-hint">Preencher = ocupa todo o espaço · Centralizar = imagem inteira visível · Original = tamanho real</p>
+                </div>
                 <div class="ld-f">
                     <label>Enviar do computador</label>
                     <button id="ldbtn" style="width:100%;padding:10px;border:2px dashed #E5E7EB;border-radius:8px;background:#F9FAFB;cursor:pointer;font-size:13px;color:#374151;transition:border .15s;">
@@ -343,12 +362,30 @@
                     <button class="ld-ko" id="ldc">Cancelar</button>
                 </div>
             </div>`;
+
             const ui     = p.querySelector('#ldiu');
             const pv     = p.querySelector('#ldprev');
             const btn    = p.querySelector('#ldbtn');
             const file   = p.querySelector('#ldfile');
             const status = p.querySelector('#ldupstatus');
             let debounce;
+            let currentFit = origFit === 'initial' || origFit === 'auto' ? 'initial' : origFit;
+
+            // Botões de object-fit
+            const fitBtns = { cover: p.querySelector('#fit-cover'), contain: p.querySelector('#fit-contain'), initial: p.querySelector('#fit-initial') };
+            function setFit(fit) {
+                currentFit = fit;
+                pv.style.objectFit = fit === 'initial' ? 'initial' : fit;
+                el.style.objectFit = fit === 'initial' ? 'initial' : fit;
+                Object.entries(fitBtns).forEach(([k, b]) => {
+                    const active = k === fit;
+                    b.style.borderColor = active ? '#1565C0' : '#E5E7EB';
+                    b.style.background  = active ? '#EFF6FF' : '#fff';
+                });
+            }
+            fitBtns.cover.onclick   = () => setFit('cover');
+            fitBtns.contain.onclick = () => setFit('contain');
+            fitBtns.initial.onclick = () => setFit('initial');
 
             // Botão abre seletor de arquivo
             btn.onclick = () => file.click();
@@ -422,14 +459,22 @@
                 pv.src = src;
                 // Atualiza TODOS os elementos com o mesmo data-eid (ex: slide + miniatura)
                 document.querySelectorAll(`[data-eid="${el.dataset.eid}"]`).forEach(e => {
-                    if (e.tagName === 'IMG') e.src = src;
+                    if (e.tagName === 'IMG') {
+                        e.src = src;
+                        e.style.objectFit = currentFit === 'initial' ? 'initial' : currentFit;
+                    }
                 });
-                this.store(el.dataset.eid, { src });
+                const entry = { src };
+                if (currentFit !== origFit) {
+                    entry.style = { objectFit: currentFit === 'initial' ? 'initial' : currentFit };
+                }
+                this.store(el.dataset.eid, entry);
                 this.closePanel();
                 this.toast('✓ Imagem salva no rascunho', 'ok');
             };
             p.querySelector('#ldc').onclick = () => {
                 el.src = origSrc;
+                el.style.objectFit = origFit;
                 this.closePanel();
             };
         },

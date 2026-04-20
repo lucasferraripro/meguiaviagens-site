@@ -199,19 +199,24 @@
            STATS
         ══════════════════════════════════════ */
         .stats-bar { background: var(--navy-dark); border-bottom: 3px solid var(--accent); }
-        .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            max-width: 900px;
+            margin: 0 auto;
+        }
         .stat {
-            display: flex; flex-direction: column; align-items: center;
-            padding: 36px 16px; border-right: 1px solid rgba(255,255,255,.07);
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 36px 20px; border-right: 1px solid rgba(255,255,255,.1);
             text-align: center;
         }
         .stat:last-child { border-right: none; }
         .stat-n {
             font-family: 'Playfair Display', serif;
             font-size: 2.4rem; font-weight: 700; color: var(--accent); line-height: 1;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
         }
-        .stat-l { font-size: 11px; color: rgba(255,255,255,.55); font-weight: 600; letter-spacing: .07em; text-transform: uppercase; }
+        .stat-l { font-size: 11px; color: rgba(255,255,255,.55); font-weight: 600; letter-spacing: .07em; text-transform: uppercase; text-align: center; }
 
         /* ══════════════════════════════════════
            COMO FUNCIONA
@@ -351,8 +356,12 @@
         .dep-stars { color: var(--gold); font-size: 13px; margin-bottom: 16px; }
         .dep-text  { font-size: 14px; color: rgba(255,255,255,.78); line-height: 1.75; margin-bottom: 24px; font-style: italic; }
         .dep-author { display: flex; align-items: center; gap: 12px; }
-        .dep-av { width: 40px; height: 40px; border-radius: 50%; overflow: hidden; border: 2px solid var(--accent); flex-shrink: 0; }
-        .dep-av img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 1; }
+        .dep-av {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: var(--accent); border: 2px solid rgba(255,255,255,.2);
+            flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+            font-size: 15px; font-weight: 700; color: var(--navy-dark);
+        }
         .dep-name { font-size: 13px; font-weight: 700; color: #fff; }
         .dep-dest { font-size: 12px; color: rgba(255,255,255,.45); margin-top: 2px; }
 
@@ -465,10 +474,11 @@
             .hero-btns .btn { width: 100%; justify-content: center; }
 
             /* stats */
-            .stats-grid { grid-template-columns: repeat(4, 1fr); gap: 0; padding: 0 5px; }
-            .stat { padding: 24px 5px; }
-            .stat-n { font-size: 1.4rem; }
-            .stat-l { font-size: 8px; letter-spacing: 0; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); max-width: 100%; }
+            .stat { padding: 24px 12px; }
+            .stat:nth-child(2) { border-right: none; }
+            .stat-n { font-size: 1.6rem; }
+            .stat-l { font-size: 9px; letter-spacing: 0; }
 
             /* steps */
             .steps-row { grid-template-columns: 1fr; }
@@ -583,6 +593,22 @@
     </div>
 </div>
 
+<!-- ════════════ DESTINOS ════════════ -->
+<section class="section dest-bg" id="destinos">
+    <div class="container">
+        <div class="dest-hdr rv">
+            <div>
+                <span class="label">Pacotes</span>
+                <h2 class="h2" data-eid="dest-title" data-elabel="Título Destinos">Destinos incríveis esperando<br>pela sua próxima aventura</h2>
+            </div>
+            <a href="#contato" class="btn btn-navy" style="flex-shrink:0">Ver Todos <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+        <div class="cards-grid" id="cards-grid">
+            <!-- Cards gerados dinamicamente pelo database.js -->
+        </div>
+    </div>
+</section>
+
 <!-- ════════════ SERVIÇOS ════════════ -->
 <section class="section servicos-bg" id="servicos">
     <div class="container">
@@ -644,22 +670,6 @@
     </div>
 </section>
 
-<!-- ════════════ DESTINOS ════════════ -->
-<section class="section dest-bg" id="destinos">
-    <div class="container">
-        <div class="dest-hdr rv">
-            <div>
-                <span class="label">Pacotes</span>
-                <h2 class="h2" data-eid="dest-title" data-elabel="Título Destinos">Destinos incríveis esperando<br>pela sua próxima aventura</h2>
-            </div>
-            <a href="#contato" class="btn btn-navy" style="flex-shrink:0">Ver Todos <i class="fa-solid fa-arrow-right"></i></a>
-        </div>
-        <div class="cards-grid" id="cards-grid">
-            <!-- Cards gerados dinamicamente pelo database.js -->
-        </div>
-    </div>
-</section>
-
 <!-- ════════════ DIFERENCIAIS ════════════ -->
 <section class="section" id="diferenciais">
     <div class="container">
@@ -711,7 +721,7 @@
                 <div class="dep-stars">★★★★★</div>
                 <p class="dep-text" data-eid="dep-1-text" data-elabel="Depoimento 1">"Minha viagem para Fortaleza foi simplesmente incrível! E eu não posso deixar de falar o quanto a Me Guia fez toda a diferença. Desde o início, todos os detalhes foram muito bem planejados e pensados, com um cuidado e um carinho em cada etapa que foram simplesmente maravilhosos. Isso trouxe muita tranquilidade pra gente e fez com que pudéssemos aproveitar cada momento sem preocupação."</p>
                 <div class="dep-author">
-                    <div class="dep-av"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" alt="Cintia" data-eid="dep-1-foto" data-elabel="Foto Depoimento 1"></div>
+                    <div class="dep-av">C</div>
                     <div><div class="dep-name" data-eid="dep-1-nome" data-elabel="Nome Depoimento 1">Cintia</div><div class="dep-dest" data-eid="dep-1-dest" data-elabel="Destino Depoimento 1">Marília, SP — Fortaleza</div></div>
                 </div>
             </div>
@@ -719,7 +729,7 @@
                 <div class="dep-stars">★★★★★</div>
                 <p class="dep-text" data-eid="dep-2-text" data-elabel="Depoimento 2">"A Agência realizou todo o procedimento para obtermos o Visto Americano desde o preenchimento dos Formulários e agendamentos, ficamos muito satisfeitos com a atenção e profissionalismo. Recomendamos."</p>
                 <div class="dep-author">
-                    <div class="dep-av"><img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=100&q=80" alt="Josane" data-eid="dep-2-foto" data-elabel="Foto Depoimento 2"></div>
+                    <div class="dep-av">J</div>
                     <div><div class="dep-name" data-eid="dep-2-nome" data-elabel="Nome Depoimento 2">Josane</div><div class="dep-dest" data-eid="dep-2-dest" data-elabel="Destino Depoimento 2">Castro, PR — Visto Americano</div></div>
                 </div>
             </div>
@@ -727,7 +737,7 @@
                 <div class="dep-stars">★★★★★</div>
                 <p class="dep-text" data-eid="dep-3-text" data-elabel="Depoimento 3">"Ir para Orlando, para a Disney, nunca foi nem um sonho para mim… mas com a Me Guia, eu pude sonhar e realizar! Minhas viagens têm roteiros em Las Vegas, Orlando, São Francisco e Santa Mônica — tudo planejado com um cuidado impecável. A Aline cuida de cada detalhe com carinho e uma organização que realmente faz toda a diferença: desde a escolha dos melhores assentos no avião até os horários ideais para não precisar correr nas conexões. É muito mais do que uma viagem — é uma experiência completa. E se você precisar de suporte, até na sala VIP ela te guia! Sem contar a ajuda com os pontos do cartão, que faz tudo ficar ainda mais acessível. Indico e recomendo de olhos fechados — simplesmente a melhor!"</p>
                 <div class="dep-author">
-                    <div class="dep-av"><img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=100&q=80" alt="Ana Paula" data-eid="dep-3-foto" data-elabel="Foto Depoimento 3"></div>
+                    <div class="dep-av">A</div>
                     <div><div class="dep-name" data-eid="dep-3-nome" data-elabel="Nome Depoimento 3">Ana Paula</div><div class="dep-dest" data-eid="dep-3-dest" data-elabel="Destino Depoimento 3">Castro, PR — Orlando, Las Vegas & Califórnia</div></div>
                 </div>
             </div>
@@ -737,7 +747,7 @@
                 <div class="dep-stars">★★★★★</div>
                 <p class="dep-text" data-eid="dep-4-text" data-elabel="Depoimento 4">"A viagem em família para Olímpia foi simplesmente perfeita. Desde as acomodações que eram impecáveis e com todo conforto que a nossa família precisava para aproveitar. Fomos com nossos 3 filhos que ficaram encantados com o resort e suas dependências. O carinho e cuidado da Me Guia foi essencial pra tornar essa experiência ainda melhor. Com certeza fecharemos novas férias com vocês, muito obrigado pela incrível experiência."</p>
                 <div class="dep-author">
-                    <div class="dep-av"><img src="https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?auto=format&fit=crop&w=100&q=80" alt="Rodrigo" data-eid="dep-4-foto" data-elabel="Foto Depoimento 4"></div>
+                    <div class="dep-av">R</div>
                     <div><div class="dep-name" data-eid="dep-4-nome" data-elabel="Nome Depoimento 4">Rodrigo</div><div class="dep-dest" data-eid="dep-4-dest" data-elabel="Destino Depoimento 4">Marília, SP — Olímpia Resort (família)</div></div>
                 </div>
             </div>
