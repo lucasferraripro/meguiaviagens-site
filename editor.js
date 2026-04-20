@@ -22,6 +22,13 @@
     function applyContent(cms) {
         if (!cms || typeof cms !== 'object' || !Object.keys(cms).length) return;
 
+        // CRÍTICO: aplica __db_overrides ao DB ANTES de qualquer render
+        if (cms.__db_overrides && typeof DB !== 'undefined') {
+            Object.entries(cms.__db_overrides).forEach(([pkgId, overrides]) => {
+                if (DB[pkgId]) Object.assign(DB[pkgId], overrides);
+            });
+        }
+
         if (cms.colors && typeof cms.colors === 'object') {
             const aliases = { '--primary': '--navy', '--primary-dark': '--navy-dark', '--text-dark': '--text' };
             Object.entries(cms.colors).forEach(([k, v]) => {
@@ -45,9 +52,12 @@
             if (d.style && typeof d.style === 'object') Object.assign(el.style, d.style);
         });
 
-        // Mesclar pacotes novos no DB (pacote.html)
+        // Mesclar pacotes novos no DB
         if (cms.__new_packages && typeof cms.__new_packages === 'object' && typeof DB !== 'undefined') {
-            Object.assign(DB, cms.__new_packages);
+            Object.entries(cms.__new_packages).forEach(([id, pkg]) => {
+                if (!pkg.category) pkg.category = 'nacional';
+                DB[id] = pkg;
+            });
         }
 
         // Remover cards marcados para remoção
@@ -60,33 +70,17 @@
 
         // Injetar cards de novos pacotes na home (index.html)
         if (cms.__new_packages && typeof cms.__new_packages === 'object') {
-            const grid = document.querySelector('.cards-grid');
-            if (grid) {
+            const grid = document.getElementById('cards-grid') || document.querySelector('.cards-grid');
+            if (grid && typeof buildCard === 'function') {
                 const removed = Array.isArray(cms.__removed_cards) ? cms.__removed_cards : [];
                 Object.entries(cms.__new_packages).forEach(([pkgId, pkg]) => {
-                    const cardId = 'card-new-' + pkgId;
+                    const cardId = 'card-' + pkgId;
                     if (removed.includes(cardId)) return;
                     if (document.getElementById(cardId)) return;
-                    const a = document.createElement('a');
-                    a.className = 'card-link rv';
-                    a.id = cardId;
-                    a.href = 'pacote.html?id=' + pkgId;
-                    const img = pkg.images && pkg.images[0] ? pkg.images[0] : 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=800&q=80';
-                    a.innerHTML = `
-                        <div class="card-img">
-                            <img src="${img}" alt="${pkg.title}" loading="lazy">
-                            <div class="card-flag">${pkg.flag || '🌍'}</div>
-                            <div class="card-overlay"><span>Ver roteiro <i class="fa-solid fa-arrow-right"></i></span></div>
-                        </div>
-                        <div class="card-body">
-                            <div class="card-loc"><i class="fa-solid fa-location-dot"></i> ${pkg.location || ''}</div>
-                            <h3>${pkg.title}</h3>
-                            <div class="card-foot">
-                                <div class="card-price">R$ ${pkg.price || '—'}<small> / pessoa</small></div>
-                                <span class="card-arrow">Saiba mais <i class="fa-solid fa-arrow-right"></i></span>
-                            </div>
-                        </div>`;
-                    grid.appendChild(a);
+                    if (!pkg.category) pkg.category = 'nacional';
+                    DB[pkgId] = pkg;
+                    const card = buildCard(pkgId, pkg);
+                    grid.appendChild(card);
                 });
             }
         }
@@ -102,7 +96,8 @@
 
     async function loadAndApply(srv) {
         let merged = (srv && typeof srv === 'object') ? { ...srv } : {};
-        if (srv && srv.__new_packages) window.__MEGUIA_SRV_CMS = srv;
+        // Expõe __SRV_CMS sempre (não só quando tem __new_packages)
+        window.__SRV_CMS = srv || {};
         if (editMode) {
             try {
                 const draft = JSON.parse(localStorage.getItem(CMS_KEY) || '{}');
@@ -216,10 +211,13 @@
             this.cms = { ...(srv || {}), ...draft };
 
             document.body.classList.add('ld-on');
+            // Também adiciona go-on para que os cards não naveguem ao clicar
+            document.body.classList.add('go-on');
             sessionStorage.setItem('editor_active', '1');
             this.buildBar();
             this.bindAll();
-            this.injectRemoveButtons();
+            // Aguarda cards dinâmicos serem renderizados antes de injetar botões
+            setTimeout(() => this.injectRemoveButtons(), 800);
             if (Object.keys(draft).length > 0) this.markDirty();
         },
 
@@ -493,7 +491,7 @@
 
         /* ── BOTÕES DE REMOÇÃO NOS CARDS DA HOME ── */
         injectRemoveButtons() {
-            document.querySelectorAll('a.card-link[id], article.card-link[id]').forEach(card => {
+            document.querySelectorAll('article.card[id], a.card-link[id], article.card-link[id]').forEach(card => {
                 if (!card.id) return;
                 if (card.querySelector('.ld-remove-btn')) return;
                 const btn = document.createElement('button');
@@ -839,6 +837,70 @@
         },
 
         store(key, val) {
+            // ── Mapeamento: campo do CMS → campo do DB ──
+            const DB_FIELDS = {
+                'pkg-price':        'price',
+                'pkg-price-cartao': 'priceCartao',
+                'pkg-parcelas':     'parcelas',
+                'pkg-title':        'title',
+                'pkg-subtitle':     'subtitle',
+                'pkg-badge':        'badge',
+                'pkg-desc':         'desc',
+            };
+            const HOME_FIELDS = {
+                'pix':    'priceCartao',
+                'parcel': 'parcelas',
+                'titulo': 'title',
+                'dest':   'location',
+                'badge':  'badge',
+            };
+
+            // Extrai valor limpo — "No cartão: <strong>R$ 2.550,00</strong>" → "2.550,00"
+            function extractValue(html, dbField) {
+                if (!html) return '';
+                const plain = html.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').trim();
+                if (dbField === 'priceCartao' || dbField === 'price') {
+                    const m = plain.match(/R\$\s*([\d.,]+)/);
+                    return m ? m[1] : plain;
+                }
+                return plain;
+            }
+
+            // Detecta padrão da PÁGINA DO PACOTE: "gramado-pkg-price"
+            const pkgMatch = key.match(/^([a-z0-9_]+)-pkg-(.+)$/);
+            if (pkgMatch) {
+                const [, pkgId, field] = pkgMatch;
+                const dbField = DB_FIELDS['pkg-' + field];
+                if (dbField && typeof DB !== 'undefined' && DB[pkgId]) {
+                    const overrides = this.cms.__db_overrides || {};
+                    if (!overrides[pkgId]) overrides[pkgId] = {};
+                    const rawVal = val.html != null
+                        ? extractValue(val.html, dbField)
+                        : (val.text || '');
+                    if (rawVal) overrides[pkgId][dbField] = rawVal;
+                    this.cms.__db_overrides = overrides;
+                    Object.assign(DB[pkgId], overrides[pkgId]);
+                }
+            }
+
+            // Detecta padrão da HOME: "pix-gramado"
+            const homeMatch = key.match(/^(pix|parcel|titulo|dest|badge)-([a-z0-9_]+)$/);
+            if (homeMatch) {
+                const [, field, pkgId] = homeMatch;
+                const dbField = HOME_FIELDS[field];
+                if (dbField && typeof DB !== 'undefined' && DB[pkgId]) {
+                    const overrides = this.cms.__db_overrides || {};
+                    if (!overrides[pkgId]) overrides[pkgId] = {};
+                    const rawVal = val.html != null
+                        ? extractValue(val.html, dbField)
+                        : (val.text || '');
+                    if (rawVal) overrides[pkgId][dbField] = rawVal;
+                    this.cms.__db_overrides = overrides;
+                    Object.assign(DB[pkgId], overrides[pkgId]);
+                }
+            }
+
+            // Salva normalmente também
             this.cms[key] = val;
             localStorage.setItem(CMS_KEY, JSON.stringify(this.cms));
             this.markDirty();
