@@ -25,7 +25,19 @@
         // CRÍTICO: aplica __db_overrides ao DB ANTES de qualquer render
         if (cms.__db_overrides && typeof DB !== 'undefined') {
             Object.entries(cms.__db_overrides).forEach(([pkgId, overrides]) => {
-                if (DB[pkgId]) Object.assign(DB[pkgId], overrides);
+                if (DB[pkgId]) {
+                    Object.assign(DB[pkgId], overrides);
+                    // Aplica imagens do override ao carrossel se estiver na página do pacote
+                    if (overrides.images && Array.isArray(overrides.images)) {
+                        overrides.images.forEach((src, idx) => {
+                            if (!src) return;
+                            const eid = pkgId + '-pkg-img-' + idx;
+                            document.querySelectorAll(`[data-eid="${eid}"]`).forEach(el => {
+                                if (el.tagName === 'IMG') el.src = src;
+                            });
+                        });
+                    }
+                }
             });
         }
 
@@ -926,6 +938,20 @@
                     this.cms.__db_overrides = overrides;
                     Object.assign(DB[pkgId], overrides[pkgId]);
                 }
+
+                // Sincroniza imagem da página do pacote: "{pkgId}-pkg-img-{idx}"
+                const imgMatch = field.match(/^img-(\d+)$/);
+                if (imgMatch && val.src && typeof DB !== 'undefined' && DB[pkgId]) {
+                    const idx = parseInt(imgMatch[1]);
+                    const overrides = this.cms.__db_overrides || {};
+                    if (!overrides[pkgId]) overrides[pkgId] = {};
+                    // Clona o array de imagens atual para não mutar o DB diretamente
+                    const imgs = [...(overrides[pkgId].images || DB[pkgId].images || [])];
+                    imgs[idx] = val.src;
+                    overrides[pkgId].images = imgs;
+                    this.cms.__db_overrides = overrides;
+                    if (DB[pkgId].images) DB[pkgId].images[idx] = val.src;
+                }
             }
 
             // Detecta padrão da HOME: "pix-gramado"
@@ -942,6 +968,23 @@
                     if (rawVal) overrides[pkgId][dbField] = rawVal;
                     this.cms.__db_overrides = overrides;
                     Object.assign(DB[pkgId], overrides[pkgId]);
+                }
+            }
+
+            // Sincroniza imagem do card da HOME: "img-{pkgId}" → __db_overrides.{pkgId}.images[0]
+            const homeImgMatch = key.match(/^img-([a-z0-9_]+)$/);
+            if (homeImgMatch && val.src && typeof DB !== 'undefined') {
+                const pkgId = homeImgMatch[1];
+                if (DB[pkgId]) {
+                    const overrides = this.cms.__db_overrides || {};
+                    if (!overrides[pkgId]) overrides[pkgId] = {};
+                    const imgs = [...(overrides[pkgId].images || DB[pkgId].images || [])];
+                    imgs[0] = val.src; // foto do card = images[0] = foto principal do pacote
+                    overrides[pkgId].images = imgs;
+                    this.cms.__db_overrides = overrides;
+                    if (DB[pkgId].images) DB[pkgId].images[0] = val.src;
+                    // Atualiza também o THUMB map em memória
+                    if (typeof THUMB !== 'undefined') THUMB[pkgId] = val.src;
                 }
             }
 

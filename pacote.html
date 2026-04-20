@@ -677,6 +677,20 @@ function applyPacoteCmsOverrides(id, cms) {
             const srv   = window.__SRV_CMS || {};
             cms = Object.assign({}, srv, local);
         }
+
+        // Aplica overrides de imagem do __db_overrides ao carrossel
+        const dbOv = cms.__db_overrides && cms.__db_overrides[id];
+        if (dbOv && dbOv.images && Array.isArray(dbOv.images)) {
+            dbOv.images.forEach((src, idx) => {
+                if (!src) return;
+                const eid = id + '-pkg-img-' + idx;
+                document.querySelectorAll(`[data-eid="${eid}"]`).forEach(el => {
+                    if (el.tagName === 'IMG') el.src = src;
+                });
+            });
+        }
+
+        // Aplica todos os outros overrides por data-eid
         document.querySelectorAll('[data-eid]').forEach(el => {
             const d = cms[el.dataset.eid];
             if (!d) return;

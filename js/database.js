@@ -273,10 +273,22 @@ const DB = {
     try {
         const draft = JSON.parse(localStorage.getItem(CMS_KEY) || '{}');
 
-        // 1. Aplica overrides de preço/título editados pelo admin
+        // 1. Aplica overrides de preço/título/imagens editados pelo admin
         if (draft.__db_overrides) {
             Object.entries(draft.__db_overrides).forEach(([pkgId, ov]) => {
-                if (DB[pkgId]) Object.assign(DB[pkgId], ov);
+                if (DB[pkgId]) {
+                    // Merge cuidadoso: arrays (images) precisam substituir, não mesclar
+                    Object.entries(ov).forEach(([field, val]) => {
+                        if (field === 'images' && Array.isArray(val)) {
+                            // Substitui apenas os índices que foram alterados
+                            val.forEach((src, i) => {
+                                if (src) DB[pkgId].images[i] = src;
+                            });
+                        } else {
+                            DB[pkgId][field] = val;
+                        }
+                    });
+                }
             });
         }
 
@@ -293,7 +305,15 @@ const DB = {
         if (srv) {
             if (srv.__db_overrides) {
                 Object.entries(srv.__db_overrides).forEach(([pkgId, ov]) => {
-                    if (DB[pkgId]) Object.assign(DB[pkgId], ov);
+                    if (DB[pkgId]) {
+                        Object.entries(ov).forEach(([field, val]) => {
+                            if (field === 'images' && Array.isArray(val)) {
+                                val.forEach((src, i) => { if (src) DB[pkgId].images[i] = src; });
+                            } else {
+                                DB[pkgId][field] = val;
+                            }
+                        });
+                    }
                 });
             }
             if (srv.__new_packages) {
