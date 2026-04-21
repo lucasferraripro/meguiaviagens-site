@@ -45,6 +45,7 @@
             background: var(--white);
             overflow-x: hidden;
             max-width: 100vw;
+            width: 100%;
             -webkit-font-smoothing: antialiased;
         }
         img { display: block; max-width: 100%; }
@@ -438,7 +439,7 @@
 
         /* ── WA FLOAT ── */
         .wa {
-            position: fixed; bottom: 24px; right: 24px;
+            position: fixed; bottom: 80px; right: 20px;
             width: 56px; height: 56px; background: var(--wa); border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
             color: #fff; font-size: 1.5rem; z-index: 888;
@@ -451,6 +452,57 @@
             background: rgba(37,211,102,.24); animation: wapulse 2s infinite;
         }
         @keyframes wapulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.35);opacity:0} }
+
+        /* ── MOBILE OVERLAY (menu) ── */
+        #mobile-overlay {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,.45); z-index: 898;
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
+        }
+        #mobile-overlay.open { display: block; }
+
+        /* ── STEPS ARROW (mobile) ── */
+        .step-arrow {
+            display: none; text-align: center;
+            color: var(--accent); font-size: 1.2rem;
+            margin: -6px 0;
+        }
+
+        /* ── DEP EXPANDIR ── */
+        .dep-text.collapsed {
+            display: -webkit-box;
+            -webkit-line-clamp: 5;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .dep-expand-btn {
+            display: none;
+            background: none; border: none; cursor: pointer;
+            color: var(--accent); font-size: 12px; font-weight: 700;
+            padding: 4px 0; margin-top: 4px; font-family: inherit;
+        }
+
+        /* ── DIF MOBILE BANNER ── */
+        .dif-mobile-banner {
+            display: none;
+            background: linear-gradient(135deg, var(--navy-dark), var(--navy));
+            border-radius: var(--r); padding: 20px;
+            margin-bottom: 24px;
+            align-items: center; gap: 16px;
+        }
+        .dif-mobile-banner .dmb-icon {
+            width: 52px; height: 52px; flex-shrink: 0;
+            background: var(--accent); border-radius: 14px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 22px; color: #fff;
+        }
+        .dif-mobile-banner .dmb-text strong {
+            display: block; font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: 3px;
+        }
+        .dif-mobile-banner .dmb-text span {
+            font-size: 12px; color: rgba(255,255,255,.65);
+        }
 
         /* ── REVEAL ── */
         .rv { opacity: 0; transform: translateY(26px); transition: opacity .55s ease, transform .55s ease; }
@@ -469,64 +521,125 @@
            RESPONSIVE — MOBILE (≤768px)
         ══════════════════════════════════════ */
         @media(max-width:768px) {
-            :root { --hh: 60px; }
-            .section { padding: 56px 0; }
+            :root { --hh: 56px; }
+            .section { padding: 44px 0; }
+            .container { padding: 0 16px; }
 
             /* header */
             .hdr-nav  { display: none; }
             .hdr-cta  { display: none; }
             .burger   { display: flex; }
+            .logo img { height: 38px !important; }
 
-            /* hero */
-            .hero-h1  { font-size: 2.4rem; }
-            .hero-p   { font-size: 1rem; }
-            .hero-btns .btn { width: 100%; justify-content: center; }
+            /* hero — centralizado verticalmente, não empurrado para baixo */
+            #home { min-height: 100svh; align-items: center; padding-bottom: 0; }
+            .hero-body { padding-top: 70px; padding-bottom: 40px; }
+            .hero-badge { font-size: 10px; padding: 6px 14px; margin-bottom: 16px; }
+            .hero-h1  { font-size: clamp(1.7rem, 8vw, 2.2rem); margin-bottom: 14px; }
+            .hero-p   { font-size: 0.9rem; margin-bottom: 24px; line-height: 1.6; }
+            .hero-btns { flex-direction: column; gap: 10px; }
+            .hero-btns .btn { width: 100%; justify-content: center; padding: 13px 20px; font-size: 14px; }
+            .hero-trust { font-size: 11px; gap: 6px 10px; margin-top: 16px; }
+            .hero-trust-sep { display: none; }
+            .hero-scroll { display: none; }
 
-            /* stats */
+            /* stats — label legível */
             .stats-grid { grid-template-columns: repeat(2, 1fr); max-width: 100%; }
-            .stat { padding: 24px 12px; }
+            .stat { padding: 20px 10px; }
             .stat:nth-child(2) { border-right: none; }
-            .stat-n { font-size: 1.6rem; }
-            .stat-l { font-size: 9px; letter-spacing: 0; }
+            .stat-n { font-size: 1.5rem; }
+            .stat-l { font-size: 10px; letter-spacing: 0; line-height: 1.4; }
 
-            /* steps */
-            .steps-row { grid-template-columns: 1fr; }
+            /* label tag dourada */
+            .label { font-size: 12px; }
+
+            /* steps — setas entre cards */
+            .steps-hdr { margin-bottom: 32px; }
+            .steps-row { grid-template-columns: 1fr; gap: 0; }
             .steps-row::before { display: none; }
+            .step { padding: 28px 20px; margin-bottom: 0; border-radius: var(--r); }
+            .step-num { width: 44px; height: 44px; font-size: 1.1rem; margin-bottom: 14px; }
+            .step h3 { font-size: 0.95rem; }
+            .step p  { font-size: 13px; }
+            .step-arrow { display: block; }
 
             /* servicos */
-            .servicos-grid { grid-template-columns: 1fr 1fr; gap: 14px; }
+            .servicos-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+            .servico-card { padding: 22px 14px; }
+            .servico-icon { width: 48px; height: 48px; font-size: 18px; margin-bottom: 12px; }
+            .servico-card h3 { font-size: 0.85rem; }
+            .servico-card p  { font-size: 12px; }
 
-            /* cards */
-            .cards-grid { grid-template-columns: 1fr; }
-            .dest-hdr   { flex-direction: column; align-items: flex-start; }
-            .card-img-wrap { height: 200px; }
+            /* cards destinos — área de toque maior no botão */
+            .cards-grid { grid-template-columns: 1fr; gap: 16px; }
+            .dest-hdr   { flex-direction: column; align-items: flex-start; gap: 12px; }
+            .dest-hdr .btn { width: 100%; justify-content: center; }
+            .card-img-wrap { height: 190px; }
+            .card-body { padding: 14px; }
+            .card-title { font-size: 0.95rem; }
+            .btn-card { padding: 14px; min-height: 48px; display: flex; align-items: center; justify-content: center; }
 
-            /* dif */
-            .dif-grid { grid-template-columns: 1fr; }
+            /* dif — banner visual no lugar da imagem */
+            .dif-grid { grid-template-columns: 1fr; gap: 0; }
             .dif-img-wrap { display: none; }
+            .dif-mobile-banner { display: flex; }
+            .dif-list { margin-top: 20px; gap: 14px; }
+            .dif-item h4 { font-size: 13px; }
+            .dif-item p  { font-size: 12px; }
 
-            /* dep */
-            .dep-grid { grid-template-columns: 1fr; max-width: 480px; }
+            /* dep — texto longo colapsável */
+            .dep-hdr { margin-bottom: 28px; }
+            .dep-grid { grid-template-columns: 1fr; max-width: 100%; gap: 16px; }
             .dep-card-full { grid-column: 1; }
+            .dep-card { padding: 22px 18px; }
+            .dep-text { font-size: 13px; }
+            .dep-text.collapsed { display: -webkit-box; -webkit-line-clamp: 5; -webkit-box-orient: vertical; overflow: hidden; }
+            .dep-expand-btn { display: block; }
 
-            /* form */
-            .form-wrap { grid-template-columns: 1fr; gap: 40px; }
-            .row2 { grid-template-columns: 1fr; }
+            /* form — form primeiro, infos depois */
+            .form-wrap { grid-template-columns: 1fr; gap: 32px; display: flex; flex-direction: column; }
+            .form-card { order: -1; padding: 24px 18px; } /* form sobe para o topo */
+            .ig input, .ig select, .ig textarea { font-size: 16px; } /* evita zoom no iOS */
 
-            /* footer */
-            .ft-top { grid-template-columns: 1fr; gap: 28px; }
-            .ft-bottom { flex-direction: column; text-align: center; }
+            /* footer — links com área de toque maior */
+            .ft-top { grid-template-columns: 1fr; gap: 24px; padding-bottom: 36px; }
+            footer { padding: 44px 0 0; }
+            .ft-bottom { flex-direction: column; text-align: center; gap: 8px; }
+            .ft-links a, .ft-links span { padding: 4px 0; display: inline-block; min-height: 36px; line-height: 28px; }
+
+            /* wa — acima da área de conteúdo inferior */
+            .wa { bottom: 20px; right: 16px; width: 52px; height: 52px; font-size: 1.35rem; }
+
+            /* h2 geral */
+            .h2 { font-size: clamp(1.4rem, 5.5vw, 1.8rem); }
+            .lead { font-size: 0.95rem; }
         }
 
         /* ══════════════════════════════════════
            RESPONSIVE — SMALL (≤480px)
         ══════════════════════════════════════ */
         @media(max-width:480px) {
-            .container { padding: 0 16px; }
-            .form-card { padding: 28px 20px; }
-            .card-img { height: 200px; }
-            .hero-h1 { font-size: 2.1rem; }
-            .servicos-grid { grid-template-columns: 1fr; }
+            .container { padding: 0 14px; }
+            .section { padding: 36px 0; }
+            .form-card { padding: 20px 16px; }
+            .hero-h1 { font-size: clamp(1.55rem, 7.5vw, 1.9rem); }
+            .hero-p  { font-size: 0.875rem; }
+            .servicos-grid { grid-template-columns: 1fr; gap: 10px; }
+            .stat-n { font-size: 1.35rem; }
+            .card-img-wrap { height: 170px; }
+            .dep-card { padding: 18px 14px; }
+            .step { padding: 22px 16px; }
+            .wa { bottom: 16px; right: 14px; width: 50px; height: 50px; font-size: 1.3rem; }
+        }
+
+        /* ══════════════════════════════════════
+           RESPONSIVE — XSMALL (≤360px)
+        ══════════════════════════════════════ */
+        @media(max-width:360px) {
+            .hero-h1 { font-size: 1.45rem; }
+            .hero-badge { font-size: 9px; padding: 5px 11px; }
+            .stat-n { font-size: 1.2rem; }
+            .servico-card h3 { font-size: 0.8rem; }
         }
     </style>
 </head>
@@ -572,6 +685,7 @@
         <i class="fab fa-whatsapp"></i> Falar no WhatsApp
     </a>
 </nav>
+<div id="mobile-overlay" onclick="closePanel()"></div>
 
 <!-- ════════════ HERO ════════════ -->
 <section id="home">
@@ -674,11 +788,13 @@
                 <h3 data-eid="step1-title" data-elabel="Passo 1 Título">Consulta Personalizada</h3>
                 <p data-eid="step1-desc" data-elabel="Passo 1 Texto">Nos conta seus sonhos, a data desejada e o orçamento. Uma conversa rápida no WhatsApp é o suficiente para começarmos.</p>
             </div>
+            <div class="step-arrow"><i class="fa-solid fa-chevron-down"></i></div>
             <div class="step rv">
                 <div class="step-num">2</div>
                 <h3 data-eid="step2-title" data-elabel="Passo 2 Título">Proposta Exclusiva</h3>
                 <p data-eid="step2-desc" data-elabel="Passo 2 Texto">Montamos um roteiro 100% personalizado com os melhores voos, hotéis e opções de milhas para o seu perfil e orçamento.</p>
             </div>
+            <div class="step-arrow"><i class="fa-solid fa-chevron-down"></i></div>
             <div class="step rv">
                 <div class="step-num">3</div>
                 <h3 data-eid="step3-title" data-elabel="Passo 3 Título">Embarque Tranquilo</h3>
@@ -699,6 +815,14 @@
             <div class="rv">
                 <span class="label">Por que escolher a Me Guia</span>
                 <h2 class="h2" data-eid="dif-title" data-elabel="Título Diferenciais">Atendimento personalizado<br>do início ao fim da viagem</h2>
+                <!-- Banner visual mobile (substitui a foto) -->
+                <div class="dif-mobile-banner">
+                    <div class="dmb-icon"><i class="fa-solid fa-star"></i></div>
+                    <div class="dmb-text">
+                        <strong>100% Satisfação Garantida</strong>
+                        <span>Atendimento consultivo do início ao fim da sua viagem</span>
+                    </div>
+                </div>
                 <p class="lead" data-eid="dif-sub" data-elabel="Subtítulo Diferenciais">A Aline cuida de cada detalhe com carinho e uma organização que realmente faz toda a diferença — desde os melhores assentos no avião até os horários ideais nas conexões. É muito mais do que uma viagem, é uma experiência completa.</p>
                 <div class="dif-list">
                     <div class="dif-item">
@@ -738,6 +862,7 @@
             <div class="dep-card rv">
                 <div class="dep-stars">★★★★★</div>
                 <p class="dep-text" data-eid="dep-1-text" data-elabel="Depoimento 1">"Minha viagem para Fortaleza foi simplesmente incrível! E eu não posso deixar de falar o quanto a Me Guia fez toda a diferença. Desde o início, todos os detalhes foram muito bem planejados e pensados, com um cuidado e um carinho em cada etapa que foram simplesmente maravilhosos. Isso trouxe muita tranquilidade pra gente e fez com que pudéssemos aproveitar cada momento sem preocupação."</p>
+                <button class="dep-expand-btn" onclick="expandDep(this)">Ver mais ↓</button>
                 <div class="dep-author">
                     <div class="dep-av">C</div>
                     <div><div class="dep-name" data-eid="dep-1-nome" data-elabel="Nome Depoimento 1">Cintia</div><div class="dep-dest" data-eid="dep-1-dest" data-elabel="Destino Depoimento 1">Marília, SP — Fortaleza</div></div>
@@ -746,6 +871,7 @@
             <div class="dep-card rv">
                 <div class="dep-stars">★★★★★</div>
                 <p class="dep-text" data-eid="dep-2-text" data-elabel="Depoimento 2">"A Agência realizou todo o procedimento para obtermos o Visto Americano desde o preenchimento dos Formulários e agendamentos, ficamos muito satisfeitos com a atenção e profissionalismo. Recomendamos."</p>
+                <button class="dep-expand-btn" onclick="expandDep(this)">Ver mais ↓</button>
                 <div class="dep-author">
                     <div class="dep-av">J</div>
                     <div><div class="dep-name" data-eid="dep-2-nome" data-elabel="Nome Depoimento 2">Josane</div><div class="dep-dest" data-eid="dep-2-dest" data-elabel="Destino Depoimento 2">Castro, PR — Visto Americano</div></div>
@@ -754,6 +880,7 @@
             <div class="dep-card dep-card-full rv">
                 <div class="dep-stars">★★★★★</div>
                 <p class="dep-text" data-eid="dep-3-text" data-elabel="Depoimento 3">"Ir para Orlando, para a Disney, nunca foi nem um sonho para mim… mas com a Me Guia, eu pude sonhar e realizar! Minhas viagens têm roteiros em Las Vegas, Orlando, São Francisco e Santa Mônica — tudo planejado com um cuidado impecável. A Aline cuida de cada detalhe com carinho e uma organização que realmente faz toda a diferença: desde a escolha dos melhores assentos no avião até os horários ideais para não precisar correr nas conexões. É muito mais do que uma viagem — é uma experiência completa. E se você precisar de suporte, até na sala VIP ela te guia! Sem contar a ajuda com os pontos do cartão, que faz tudo ficar ainda mais acessível. Indico e recomendo de olhos fechados — simplesmente a melhor!"</p>
+                <button class="dep-expand-btn" onclick="expandDep(this)">Ver mais ↓</button>
                 <div class="dep-author">
                     <div class="dep-av">A</div>
                     <div><div class="dep-name" data-eid="dep-3-nome" data-elabel="Nome Depoimento 3">Ana Paula</div><div class="dep-dest" data-eid="dep-3-dest" data-elabel="Destino Depoimento 3">Castro, PR — Orlando, Las Vegas & Califórnia</div></div>
@@ -764,6 +891,7 @@
             <div class="dep-card" style="display:inline-block;max-width:600px;background:rgba(255,255,255,.06);">
                 <div class="dep-stars">★★★★★</div>
                 <p class="dep-text" data-eid="dep-4-text" data-elabel="Depoimento 4">"A viagem em família para Olímpia foi simplesmente perfeita. Desde as acomodações que eram impecáveis e com todo conforto que a nossa família precisava para aproveitar. Fomos com nossos 3 filhos que ficaram encantados com o resort e suas dependências. O carinho e cuidado da Me Guia foi essencial pra tornar essa experiência ainda melhor. Com certeza fecharemos novas férias com vocês, muito obrigado pela incrível experiência."</p>
+                <button class="dep-expand-btn" onclick="expandDep(this)">Ver mais ↓</button>
                 <div class="dep-author">
                     <div class="dep-av">R</div>
                     <div><div class="dep-name" data-eid="dep-4-nome" data-elabel="Nome Depoimento 4">Rodrigo</div><div class="dep-dest" data-eid="dep-4-dest" data-elabel="Destino Depoimento 4">Marília, SP — Olímpia Resort (família)</div></div>
@@ -927,13 +1055,18 @@
     // ── Mobile menu ──
     const burger = document.getElementById('burger');
     const panel  = document.getElementById('mobile-panel');
+    const overlay = document.getElementById('mobile-overlay');
     burger.addEventListener('click', () => {
         burger.classList.toggle('open');
         panel.classList.toggle('open');
+        overlay.classList.toggle('open');
+        document.body.style.overflow = panel.classList.contains('open') ? 'hidden' : '';
     });
     function closePanel() {
         burger.classList.remove('open');
         panel.classList.remove('open');
+        overlay.classList.remove('open');
+        document.body.style.overflow = '';
     }
 
     // ── Reveal on scroll ──
@@ -946,6 +1079,34 @@
         });
     }, { threshold: 0.1, rootMargin: '0px 0px -36px 0px' });
     document.querySelectorAll('.rv').forEach(el => obs.observe(el));
+
+    // ── Depoimentos colapsáveis no mobile ──
+    function initDepCollapse() {
+        if (window.innerWidth > 768) return;
+        document.querySelectorAll('.dep-text').forEach(p => {
+            // Só colapsa se o texto for longo (mais de 5 linhas aprox.)
+            if (p.scrollHeight > p.clientHeight + 10 || p.textContent.length > 200) {
+                p.classList.add('collapsed');
+                const btn = p.nextElementSibling;
+                if (btn && btn.classList.contains('dep-expand-btn')) {
+                    btn.style.display = 'block';
+                }
+            }
+        });
+    }
+    window.expandDep = function(btn) {
+        const p = btn.previousElementSibling;
+        if (p && p.classList.contains('dep-text')) {
+            p.classList.remove('collapsed');
+            btn.style.display = 'none';
+        }
+    };
+    // Inicializa após fontes carregarem
+    if (document.fonts) {
+        document.fonts.ready.then(initDepCollapse);
+    } else {
+        setTimeout(initDepCollapse, 400);
+    }
 
     // ── Crianças toggle ──
     window.toggleCriancas = function(radio) {

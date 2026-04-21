@@ -91,6 +91,8 @@
         #mobile-panel.open { display: flex; }
         #mobile-panel a { padding: 12px 14px; font-size: 14px; font-weight: 600; color: var(--text); border-radius: 12px; }
         #mobile-panel a:hover { background: var(--bg); color: var(--accent); }
+        #mobile-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 898; backdrop-filter: blur(2px); -webkit-backdrop-filter: blur(2px); }
+        #mobile-overlay.open { display: block; }
 
         /* ════════════ HERO MINI ════════════ */
         .hero-mini {
@@ -225,25 +227,62 @@
             .cards-row { grid-template-columns: repeat(2,1fr); }
         }
         @media(max-width:768px) {
-            :root { --hh: 58px; }
+            :root { --hh: 56px; }
             .hdr-nav  { display: none; }
             .hdr-cta  { display: none; }
             .burger   { display: flex; }
-            .carousel-slide img { height: 280px; }
+            .container { padding: 0 16px; }
+
+            /* hero mini */
+            .hero-mini { padding: 36px 0 28px; }
+            .hero-mini h1 { font-size: clamp(1.5rem, 6vw, 2rem); }
+            .hero-mini-meta { gap: 10px; flex-wrap: wrap; }
+            .meta-tag { font-size: 12px; }
+            .breadcrumb { font-size: 11px; }
+
+            /* layout */
+            .pkg-layout { padding: 24px 0 48px; gap: 24px; }
+
+            /* carrossel */
+            .carousel-slide img { height: 240px; }
             .thumbnails { gap: 7px; }
-            .thumb { height: 56px; }
-            .ft-top { grid-template-columns: 1fr 1fr; gap: 28px; }
-            .ft-bottom { flex-direction: column; text-align: center; }
-            .outros-hdr { flex-direction: column; align-items: flex-start; }
+            .thumb { height: 54px; }
+            .car-btn { width: 36px; height: 36px; font-size: 12px; }
+
+            /* content blocks */
+            .cblock { padding: 20px 16px; margin-bottom: 16px; }
+            .cblock-title { font-size: 0.95rem; }
+            .pkg-desc { font-size: 14px; }
+            .incluso-list li { font-size: 13px; }
+            .roteiro-body h4 { font-size: 13px; }
+            .roteiro-body p  { font-size: 12px; }
+
+            /* price card */
+            .price-card { padding: 22px 18px; }
+            .price-num  { font-size: 1.8rem; }
+            .price-card .btn { height: 46px; font-size: 14px; }
+
+            /* outros destinos */
+            .outros { padding: 44px 0; }
+            .outros-hdr { flex-direction: column; align-items: flex-start; gap: 12px; }
+            .outros-hdr .btn { width: 100%; justify-content: center; }
+
+            /* footer */
+            .ft-top { grid-template-columns: 1fr 1fr; gap: 24px; }
+            .ft-bottom { flex-direction: column; text-align: center; gap: 8px; }
         }
         @media(max-width:480px) {
-            .container { padding: 0 16px; }
-            .carousel-slide img { height: 240px; }
+            .container { padding: 0 14px; }
+            .carousel-slide img { height: 200px; }
             .cards-row { grid-template-columns: 1fr; }
-            .cblock { padding: 22px 18px; }
-            .price-card { padding: 24px 20px; }
-            .pkg-layout { padding: 32px 0 60px; }
-            .ft-top { grid-template-columns: 1fr; gap: 24px; }
+            .cblock { padding: 16px 14px; }
+            .price-card { padding: 18px 14px; }
+            .pkg-layout { padding: 16px 0 40px; }
+            .ft-top { grid-template-columns: 1fr; gap: 20px; }
+            .hero-mini h1 { font-size: clamp(1.3rem, 7vw, 1.7rem); }
+            .price-num { font-size: 1.6rem; }
+            .ig input, .ig select, .ig textarea { font-size: 16px; }
+            .wa { bottom: 16px; right: 16px; width: 50px; height: 50px; font-size: 1.3rem; }
         }
     </style>
 </head>
@@ -284,6 +323,7 @@
         <i class="fab fa-whatsapp"></i> Falar no WhatsApp
     </a>
 </nav>
+<div id="mobile-overlay" onclick="closePanel()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:898;backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);"></div>
 
 <!-- ════════════ HERO MINI ════════════ -->
 <div class="hero-mini">
@@ -483,10 +523,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     // ── Mobile menu ──
     const burger = document.getElementById('burger');
     const panel  = document.getElementById('mobile-panel');
+    const overlay = document.getElementById('mobile-overlay');
     burger.addEventListener('click', () => {
         burger.classList.toggle('open');
         panel.classList.toggle('open');
+        if (overlay) overlay.classList.toggle('open');
+        document.body.style.overflow = panel.classList.contains('open') ? 'hidden' : '';
     });
+    function closePanel() {
+        burger.classList.remove('open');
+        panel.classList.remove('open');
+        if (overlay) overlay.classList.remove('open');
+        document.body.style.overflow = '';
+    }
 });
 
 /* ── renderPacote — usa CMS com prioridade sobre DB ── */
@@ -700,6 +749,17 @@ function applyPacoteCmsOverrides(id, cms) {
             if (d.style) Object.assign(el.style, d.style);
         });
     } catch (_) {}
+}
+
+// ── closePanel global (usado pelos links do menu mobile) ──
+function closePanel() {
+    const burger  = document.getElementById('burger');
+    const panel   = document.getElementById('mobile-panel');
+    const overlay = document.getElementById('mobile-overlay');
+    if (burger)  burger.classList.remove('open');
+    if (panel)   panel.classList.remove('open');
+    if (overlay) overlay.classList.remove('open');
+    document.body.style.overflow = '';
 }
 </script>
 <!-- ═══ EDITOR VISUAL ═══ -->

@@ -71,6 +71,12 @@
             text-align: left; margin-bottom: 20px;
         }
         .hint strong { display: block; margin-bottom: 4px; }
+        @media(max-width:480px) {
+            body { align-items: flex-start; padding: 20px 16px; }
+            .card { padding: 32px 22px; border-radius: 18px; }
+            h1 { font-size: 1.3rem; }
+            .field input { font-size: 16px; } /* evita zoom no iOS */
+        }
     </style>
 </head>
 <body>
