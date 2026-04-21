@@ -99,7 +99,7 @@
         #header {
             position: fixed; top: 0; left: 0; right: 0;
             height: var(--hh); z-index: 900;
-            transition: background .3s, box-shadow .3s;
+            background: var(--white); box-shadow: 0 1px 16px rgba(0,0,0,.09);
         }
         #header.solid { background: var(--white); box-shadow: 0 1px 16px rgba(0,0,0,.09); }
 
@@ -112,13 +112,12 @@
             display: flex; align-items: center; gap: 9px;
             font-family: 'Playfair Display', serif;
             font-size: 1.2rem; font-weight: 700;
-            color: #fff;
-            transition: color .3s;
+            color: var(--navy);
         }
         #header.solid .logo { color: var(--navy); }
 
         .hdr-nav { display: flex; align-items: center; gap: 28px; }
-        .hdr-nav a { font-size: 14px; font-weight: 500; color: rgba(255,255,255,.88); transition: color .2s; }
+        .hdr-nav a { font-size: 14px; font-weight: 500; color: var(--text); transition: color .2s; }
         .hdr-nav a:hover { color: var(--accent); }
         #header.solid .hdr-nav a { color: var(--text); }
         #header.solid .hdr-nav a:hover { color: var(--accent); }
@@ -127,7 +126,7 @@
 
         /* burger */
         .burger { display: none; flex-direction: column; gap: 5px; padding: 6px; background: none; border: none; cursor: pointer; }
-        .burger span { display: block; width: 22px; height: 2px; background: #fff; border-radius: 2px; transition: all .3s; }
+        .burger span { display: block; width: 22px; height: 2px; background: var(--navy); border-radius: 2px; transition: all .3s; }
         #header.solid .burger span { background: var(--navy); }
         .burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
         .burger.open span:nth-child(2) { opacity: 0; }
