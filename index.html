@@ -532,14 +532,13 @@
 
             /* hero — centralizado verticalmente, não empurrado para baixo */
             #home { min-height: 100svh; align-items: center; padding-bottom: 0; }
-            .hero-body { padding-top: 70px; padding-bottom: 32px; }
-            .hero-badge { font-size: 9px; padding: 5px 12px; margin-bottom: 12px; letter-spacing: .08em; }
-            .hero-h1  { font-size: clamp(1.35rem, 6.5vw, 1.7rem); line-height: 1.15; margin-bottom: 10px; }
-            .hero-p   { font-size: 0.82rem; margin-bottom: 18px; line-height: 1.55; color: rgba(255,255,255,.75); }
-            .hero-btns { flex-direction: column; gap: 8px; }
-            .hero-btns .btn { width: 100%; justify-content: center; padding: 12px 18px; font-size: 13px; }
-            .hero-trust { font-size: 10px; gap: 5px 8px; margin-top: 12px; }
-            .hero-trust i { margin-right: 3px; }
+            .hero-body { padding-top: 70px; padding-bottom: 40px; }
+            .hero-badge { font-size: 10px; padding: 6px 14px; margin-bottom: 16px; }
+            .hero-h1  { font-size: clamp(1.7rem, 8vw, 2.2rem); margin-bottom: 14px; }
+            .hero-p   { font-size: 0.9rem; margin-bottom: 24px; line-height: 1.6; }
+            .hero-btns { flex-direction: column; gap: 10px; }
+            .hero-btns .btn { width: 100%; justify-content: center; padding: 13px 20px; font-size: 14px; }
+            .hero-trust { font-size: 11px; gap: 6px 10px; margin-top: 16px; }
             .hero-trust-sep { display: none; }
             .hero-scroll { display: none; }
 
@@ -626,8 +625,8 @@
             .container { padding: 0 14px; }
             .section { padding: 36px 0; }
             .form-card { padding: 20px 16px; }
-            .hero-h1 { font-size: clamp(1.2rem, 6vw, 1.5rem); }
-            .hero-p  { font-size: 0.8rem; }
+            .hero-h1 { font-size: clamp(1.55rem, 7.5vw, 1.9rem); }
+            .hero-p  { font-size: 0.875rem; }
             .servicos-grid { grid-template-columns: 1fr; gap: 10px; }
             .stat-n { font-size: 1.35rem; }
             .card-img-wrap { height: 170px; }
@@ -636,9 +635,12 @@
             .wa { bottom: 16px; right: 14px; width: 50px; height: 50px; font-size: 1.3rem; }
         }
 
+        /* ══════════════════════════════════════
+           RESPONSIVE — XSMALL (≤360px)
+        ══════════════════════════════════════ */
         @media(max-width:360px) {
-            .hero-h1 { font-size: 1.15rem; }
-            .hero-badge { font-size: 8px; padding: 4px 10px; }
+            .hero-h1 { font-size: 1.45rem; }
+            .hero-badge { font-size: 9px; padding: 5px 11px; }
             .stat-n { font-size: 1.2rem; }
             .servico-card h3 { font-size: 0.8rem; }
         }
