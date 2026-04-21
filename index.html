@@ -600,11 +600,15 @@
             .form-card { order: -1; padding: 24px 18px; } /* form sobe para o topo */
             .ig input, .ig select, .ig textarea { font-size: 16px; } /* evita zoom no iOS */
 
-            /* footer — links com área de toque maior */
-            .ft-top { grid-template-columns: 1fr; gap: 24px; padding-bottom: 36px; }
-            footer { padding: 44px 0 0; }
-            .ft-bottom { flex-direction: column; text-align: center; gap: 8px; }
-            .ft-links a, .ft-links span { padding: 4px 0; display: inline-block; min-height: 36px; line-height: 28px; }
+            /* footer — compacto no mobile */
+            .ft-top { grid-template-columns: 1fr; gap: 16px; padding-bottom: 20px; }
+            footer { padding: 24px 0 0; }
+            .ft-brand p { margin-top: 6px; font-size: 12px; line-height: 1.5; }
+            .ft-brand .ft-social { margin-top: 10px; }
+            footer h5 { margin-bottom: 8px; }
+            .ft-bottom { flex-direction: column; text-align: center; gap: 6px; }
+            .ft-links { gap: 0; }
+            .ft-links a, .ft-links span { padding: 6px 0; display: block; min-height: unset; line-height: 1.4; font-size: 13px; }
 
             /* wa — acima da área de conteúdo inferior */
             .wa { bottom: 20px; right: 16px; width: 52px; height: 52px; font-size: 1.35rem; }

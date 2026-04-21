@@ -268,8 +268,12 @@
             .outros-hdr .btn { width: 100%; justify-content: center; }
 
             /* footer */
-            .ft-top { grid-template-columns: 1fr 1fr; gap: 24px; }
-            .ft-bottom { flex-direction: column; text-align: center; gap: 8px; }
+            .ft-top { grid-template-columns: 1fr; gap: 16px; padding-bottom: 20px; }
+            footer { padding: 24px 0 0; }
+            .ft-brand p { margin-top: 6px; font-size: 12px; line-height: 1.5; }
+            .ft-bottom { flex-direction: column; text-align: center; gap: 6px; }
+            .ft-links { gap: 0; }
+            .ft-links a, .ft-links span { padding: 5px 0; display: block; font-size: 13px; line-height: 1.4; }
         }
         @media(max-width:480px) {
             .container { padding: 0 14px; }
@@ -278,7 +282,7 @@
             .cblock { padding: 16px 14px; }
             .price-card { padding: 18px 14px; }
             .pkg-layout { padding: 16px 0 40px; }
-            .ft-top { grid-template-columns: 1fr; gap: 20px; }
+            .ft-top { grid-template-columns: 1fr; gap: 14px; }
             .hero-mini h1 { font-size: clamp(1.3rem, 7vw, 1.7rem); }
             .price-num { font-size: 1.6rem; }
             .ig input, .ig select, .ig textarea { font-size: 16px; }
